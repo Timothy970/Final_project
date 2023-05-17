@@ -1,0 +1,69 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'polls/index.css' %}"
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Online Blood Donation System</title>
+	<link rel="stylesheet" href="trydemo.css">
+</head>
+<body>
+	<header>
+		
+	</header>
+	<main>
+		<div class="hero">
+			<div class="hero-text">
+				<div class="container">
+					<div class="image">
+						<img src="naiduu.png" style="width:150px">
+					</div>
+					<div class="text">
+						<h1>Naidu Hospital</h1>
+					</div>
+				</div>
+				<h1>Online Blood Donation</h1>
+				<p>Donate blood, save lives.</p>
+			</div>
+		</div>
+		<div class="donation-info">
+			<h2>The Importance of Blood Donation</h2>
+			<p>Donating blood is a simple yet impactful way to save lives. Every 2 seconds, someone in the world needs blood. By donating blood, you can help patients who are undergoing surgery, recovering from cancer treatments, or suffering from life-threatening injuries. Your blood donation can make a real difference in someone's life.</p>
+		<div class="center"><button class="get_answers">DONATE NOW</button></div>
+		</div>
+		<div class="donation-info">
+			<h2>In Need of Blood Donation?</h2>
+			<p>Are you there looking for blood donors for a friend, family member or someone in need blood donation? Meet various blood donor volunteers and communicate with them. Luckily you can fnd a potential donor for the person in need of blood donation and keep on saving lives.</p>
+		<div class="center"><button class="get_answers">REQUEST NOW</button></div>
+		</div>
+		<div class="donation-info">
+			<h2>Am I Eligible to Donate Blood?</h2>
+			<p>Are you eligible for blood donatio? Find out now the eligibility requirements to donate blood today. Learn about general health, travel, medications, tattos, and more.</p>
+		<div class="center"><button class="get_answers">LEARN MORE</button></div>
+
+		</div>
+		<div class="donation-info">
+			<h2>New to Blood Donation?</h2>
+			<p>We answer the most frequent asked questions about blood donation in the new Be a Hero Donor Guide. Enter your information to learn the truth about some blood donation myths and how you can help patients.</p>
+			<form>
+				<label for="fname">First Name</label>
+				<input type="text" id="fname" name="firstname" placeholder="Your first name..."
+
+				<label for="lname">Last Name</label>
+				<input type="text" id="lname" name="lastname" placeholder="Your last name..." required>
+
+				<label for="email">Email</label>
+				<input type="email" id="email" name="email" placeholder="user@gmail.com" required>
+
+				<label for="city">City</label>
+				<input type="text" id="city" name="city" placeholder="Your city..." required>
+			</form>
+			<div class="center">
+				<button class="get_answers">DOWNLOAD NOW</button>
+			</div>	
+			<p><i>By submitting this form you agree to our <a href="#">Privacy Policy</a>.</i></p>
+		</div>
+	</main>
+</body>
+</html>
