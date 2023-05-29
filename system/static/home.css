@@ -1,0 +1,286 @@
+body {
+	margin: 0;
+	padding: 0;
+	font-family: Arial, sans-serif;
+	
+}
+
+header {
+	background-color: #fff;
+	padding: 1px;
+	position: fixed;
+	width: 100%;
+	
+}
+
+nav {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+nav ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	
+}
+
+nav ul li {
+	margin: 0 20px;
+	
+	padding: 0px 10px;
+	color: #fff;
+	border-radius: 5px;
+}
+
+nav ul li a {
+	
+	text-decoration: none;
+	font-size: 18px;
+}
+
+.log-in {
+	display: flex;
+	align-items: center;
+	padding: 20px;
+}
+
+
+.log-in a {
+	margin-left: 20px;
+	background: linear-gradient(to bottom, rgb(232, 9, 9) 0%, #790b42 100%);
+	color: #fff;
+	padding: 10px 20px;
+	border-radius: 5px;
+	text-decoration: none;
+	font-size: 16px;
+}
+
+.hero {
+	background: linear-gradient(to bottom, rgb(232, 9, 9) 0%, #d21609 100%);
+	background-size: cover;
+	height: 200px;
+	display: flex;
+	align-items: center;
+}
+
+.hero-text {
+	color: #fff;
+	padding: 10px;
+}
+
+.hero-text h1 {
+	font-size: 30px;
+	margin: 0;
+}
+
+.hero-text p {
+	font-size: 20px;
+	margin: 0;
+}
+.text h1{
+	float: right;
+}
+.donation-info {
+	background-color: beige;
+	padding: 50px;
+}
+.donation-info h2 {
+	font-size: 40px;
+	margin: 0;
+	padding-bottom: 20px;
+	
+}
+
+.donation-info p {
+	font-size: 22px;
+	line-height: 1.5;
+	margin-left: 2cm;
+	padding: 20px;
+	margin-left: 40%;
+	margin-right: 5%;
+}
+.donation-info2 {
+	background-color: beige;
+	padding: 50px;
+}
+.donation-info2 h2 {
+	font-size: 40px;
+	margin: 0;
+	padding-bottom: 20px;
+	
+}
+
+.donation-info2 p {
+	font-size: 22px;
+	line-height: 1.5;
+	margin-right: 50%;
+	padding: 20px;
+}
+
+.donation-info3 {
+	background-color: beige;
+	padding: 50px;
+}
+.donation-info3 h2 {
+	font-size: 40px;
+	margin: 0;
+	padding-bottom: 20px;
+}
+
+.donation-info3 p {
+	font-size: 22px;
+	line-height: 1.5;
+	padding: 20px;
+	margin-left: 50%;
+	margin-right: 1%;
+	
+}
+.donation-info4 {
+	background-color: beige;
+	padding: 50px;
+}
+.donation-info4 h2 {
+	font-size: 40px;
+	margin: 0;
+	
+}
+
+.donation-info4 p {
+	font-size: 22px;
+	line-height: 1.5;
+	
+}
+.get_answers{
+	padding: 10px 20px;
+	border-radius: 5px;
+	background: linear-gradient(to bottom, rgb(232, 9, 9) 0%, #350606 100%);
+	color: white;
+	font-family: Arial, sans-serif;
+	font-size: 14px;
+	font-weight: bold;
+	text-decoration: none;
+	border: 0;
+	
+}
+.container{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	
+}
+
+
+input[type=text],input[type=email]{
+	width: 100%;
+	padding: 12px 20px;
+	margin: 8px 0;
+	display: inline-block;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-sizing: border-box;
+}
+form{
+	width: 50%;
+	padding: 10px 10px 10px 150px;
+}
+.center{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+footer {
+	background-color: #f5f5f5;
+	padding: 0px;
+	text-align: center;
+	
+	
+  }
+  
+
+  .fa {
+	padding: 10px;
+	font-size: 20px;
+	width: 30px;
+	text-align: center;
+	text-decoration: none;
+	margin: 5px 2px;
+  }
+  
+  .fa:hover {
+	  opacity: 0.7;
+  }
+  
+  .fa-facebook {
+	background: #3B5998;
+	color: white;
+  }
+  
+  .fa-twitter {
+	background: #55ACEE;
+	color: white;
+  }
+  .fa-heart{
+	color: red;	
+}
+  
+  .img_donate{
+	border-radius: 5px;
+	float: left;
+	width: 40%;
+  }
+ .img_request{
+	border-radius: 5px;
+	float: right;
+	width: 45%;
+	height: auto;
+ }
+ .img_eligible{
+	border-radius: 5px;
+	float: left;
+	width: 45%
+
+ }
+ .eligibility_list{
+	margin-left: 1cm;
+	
+	
+	
+}
+ 
+ .learnmore_text{
+	margin: 22px;
+	
+ }
+ .learnmore_text p{
+	font-size: 22px;
+ }
+.intro_eligibility p{
+	font-size: 22px;
+	line-height: 1.5;
+	padding: 20px;
+	margin-left: 1%;
+	margin-right: 50%;
+}
+.first-button:hover{
+	cursor:pointer;
+	background: linear-gradient(to top, rgb(232, 9, 9) 0%, #ef0606 100%);
+	color:#fbfcfae1;
+	transition: 0.07s;
+}
+
+.first-button{
+    width: 320px;
+    height: 35px;
+    margin-top: 20px;
+    border: none;
+    background: linear-gradient(to bottom, rgb(232, 9, 9) 0%, #350606 100%);
+    color: white;
+    font-size: 18px;
+    margin-left: 20%;
+    border-radius: 5px;
+    cursor: pointer;
+  }

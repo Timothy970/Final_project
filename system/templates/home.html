@@ -1,23 +1,26 @@
 {% load static %}
-<link rel="stylesheet" href="{% static 'polls/index.css' %}"
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Online Blood Donation System</title>
-	<link rel="stylesheet" href="trydemo.css">
+	<link rel ="stylesheet" href="{% static 'home.css' %}">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
 	<header>
-		
+			
 	</header>
+	
 	<main>
 		<div class="hero">
 			<div class="hero-text">
 				<div class="container">
 					<div class="image">
-						<img src="naiduu.png" style="width:150px">
+						
 					</div>
 					<div class="text">
 						<h1>Naidu Hospital</h1>
@@ -27,28 +30,33 @@
 				<p>Donate blood, save lives.</p>
 			</div>
 		</div>
+		{% block content %}
 		<div class="donation-info">
 			<h2>The Importance of Blood Donation</h2>
+			<img class="img_donate" src="{% static 'blood.jpg' %}" alt="donate blood">
 			<p>Donating blood is a simple yet impactful way to save lives. Every 2 seconds, someone in the world needs blood. By donating blood, you can help patients who are undergoing surgery, recovering from cancer treatments, or suffering from life-threatening injuries. Your blood donation can make a real difference in someone's life.</p>
-		<div class="center"><button class="get_answers">DONATE NOW</button></div>
+		<div class="center"><button class="get_answers" onclick="window.location.href = {% url 'login'%};">DONATE NOW</button></div>
 		</div>
-		<div class="donation-info">
+		<div class="donation-info2">
 			<h2>In Need of Blood Donation?</h2>
+			<img class="img_request" src="{% static 'blood1.jpg' %}" alt="need of blood">
 			<p>Are you there looking for blood donors for a friend, family member or someone in need blood donation? Meet various blood donor volunteers and communicate with them. Luckily you can fnd a potential donor for the person in need of blood donation and keep on saving lives.</p>
-		<div class="center"><button class="get_answers">REQUEST NOW</button></div>
+			
+			<div class="center"><button class="get_answers">REQUEST NOW</button></div>
 		</div>
-		<div class="donation-info">
+		<div class="donation-info3">
 			<h2>Am I Eligible to Donate Blood?</h2>
+			<img class="img_eligible" src="{% static 'blood2.jpg' %}" alt="need of blood">
 			<p>Are you eligible for blood donatio? Find out now the eligibility requirements to donate blood today. Learn about general health, travel, medications, tattos, and more.</p>
-		<div class="center"><button class="get_answers">LEARN MORE</button></div>
+		<div class="center"><button class="get_answers" onclick="window.location.href = {% url 'learnmore'%};">LEARN MORE</button></div>
 
 		</div>
-		<div class="donation-info">
+		<div class="donation-info4">
 			<h2>New to Blood Donation?</h2>
 			<p>We answer the most frequent asked questions about blood donation in the new Be a Hero Donor Guide. Enter your information to learn the truth about some blood donation myths and how you can help patients.</p>
 			<form>
 				<label for="fname">First Name</label>
-				<input type="text" id="fname" name="firstname" placeholder="Your first name..."
+				<input type="text" id="fname" name="firstname" placeholder="Your first name...">
 
 				<label for="lname">Last Name</label>
 				<input type="text" id="lname" name="lastname" placeholder="Your last name..." required>
@@ -65,5 +73,23 @@
 			<p><i>By submitting this form you agree to our <a href="#">Privacy Policy</a>.</i></p>
 		</div>
 	</main>
+	{% endblock %}
+	<footer>
+		<div class="footer">
+			<h3>
+			**Contact us**
+			</h3>
+			<h5>Tel. 0225468376
+			<a href = "mailto:kimanitimothy642@gmail.com?subject = Feedback&body = Message">
+				@naiduhospitalgmail.com
+				</a></h5>
+			<h4>
+			&copy; 2023, Created for Naidu Hospital
+			
+			
+			<a href="#" class="fa fa-facebook"></a>
+			<a href="#" class="fa fa-twitter"></a></h4>
+		</div>
+	</footer>
 </body>
 </html>

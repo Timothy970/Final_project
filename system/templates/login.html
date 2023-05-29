@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Sign Up</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <link rel ="stylesheet" href="{% static 'signup.css' %}">
+	  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+  <body> 
+    <div class="hero">
+			<div class="hero-text">
+				<div class="container">
+					<div class="image">
+						
+					</div>
+					<div class="text">
+						<h1>Naidu Hospital</h1>
+					</div>
+				</div>
+				<h1>Online Blood Donation</h1>
+				<p>Donate blood, save lives.</p>
+			</div>
+		</div>     
+    <div class="signup-box">
+        <form>
+            <p>Don't have an account? <a href="signup.html">Sign up here</a></p>
+            <label for="fname">Username (Enter your email as username)</label>
+            <input type="text" id="name" name="firstname" placeholder="Your first name...">
+              
+            <label for="lname">Password</label>
+            <input type="text" id="lname" name="lastname" placeholder="Your last name..." required>
+
+            
+            <input type="button" value="Submit" />
+            <p><a href='#'>Forgot Password?</a></p>
+        </form>
+     
+        <footer>
+          <div class="footer">
+            <h3>
+            **Contact us**
+            </h3>
+            <h5>Tel. 0225468376
+            <a href = "mailto:kimanitimothy642@gmail.com?subject = Feedback&body = Message">
+              @naiduhospitalgmail.com
+              </a></h5>
+            <h4>
+            &copy; 2023, Created for Naidu Hospital
+            
+            
+            <a href="#" class="fa fa-facebook"></a>
+            <a href="#" class="fa fa-twitter"></a></h4>
+          </div>
+        </footer>
+  </body>
+</html>
