@@ -1,0 +1,177 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <link rel ="stylesheet" href="{% static 'signup.css' %}">
+	  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+  <body> 
+<div class="hero">
+  <h1>Blood Heroes</h1>
+  
+  <nav>
+    <ul>
+      <li><a href="#home">Home</a></li>
+      <li><a href="#news">Donate Blood</a></li>
+      <li><a href="#contact">Request Blood</a></li>
+      <li style="float:right"><a class="active" href="#about">About</a></li>
+    </ul>
+  </nav>
+  
+</div>
+<div class = "info">
+  <h1>Donate with us today</h1>  
+  <p>Create a donor account today to register yourself as a potential donor and help somenone in need of blood</p>     
+</div>   
+<div class="signup-box">
+  <form action="/" method="post">
+    {% csrf_token %}
+    <p>Already have an account? <a href="{% url 'login'%}">Sign in here</a></p>
+    <label for="fname">First Name</label>
+    <input type="text" id="name" name="firstname" placeholder="Your first name..." required>
+      
+    <label for="lname">Last Name</label>
+    <input type="text" id="lname" name="lastname" placeholder="Your last name..." required>
+
+    <label for="city">Date of birth</label>
+    <input type="date" id="birthday" name="birthday" required>
+      
+    <label for="email">Email</label>
+    <input type="email" id="email" name="email" placeholder="user@gmail.com" required>
+
+  
+    <label for="phone_no">Phone Number</label>
+    <input type="number" id="phone_no" name="phone_no" placeholder="" required>
+      
+    <label for="city">City</label>
+    <select id="city" name="city" required>
+        <option value="city">Select your city</option>
+        <option value="Baragoi">Baragoi</option>
+        <option value="Bungoma">Bungoma</option>
+        <option value="Busia">Busia</option>
+        <option value="Butere">Butere</option>
+        <option value="Dadaab">Dadaab</option>
+        <option value="Diani Beach">Diani Beach</option>
+        <option value="Eldoret">Eldoret</option>
+        <option value="Emali">Emali</option>
+        <option value="Embu">Embu</option>
+        <option value="Garissa">Garissa</option>
+        <option value="Gedi">Gede</option>
+        <option value="Hola">Hola</option>
+        <option value="Homa Bay">Homa Bay</option>
+        <option value="Isiolo">Isiolo</option>
+        <option value="Kitui">Kitui</option>
+        <option value="Kibwezi">Kibwezi</option>
+        <option value="Kajiado">Kajiado</option>
+        <option value="Kakamega">Kakamega</option>
+        <option value="Kakuma">Kakuma</option>
+        <option value="Kapenguria">Kapenguria</option>
+        <option value="Kericho">Kericho</option>
+        <option value="Keroka">Keroka</option>
+        <option value="Kiambu">Kiambu</option>
+        <option value="Kilifi">Kilifi</option>
+        <option value="Kisii">Kisii</option>
+        <option value="Kisumu">Kisumu</option>
+        <option value="Kitale">Kitale</option>
+        <option value="Lamu">Lamu</option>
+        <option value="Langata">Langata</option>
+        <option value="Litein">Litein</option>
+        <option value="Lodwar">Lodwar</option>
+        <option value="Lokichoggio">Lokichoggio</option>
+        <option value="Londiani">Londiani</option>
+        <option value="Loyangalani">Loyangalani</option>
+        <option value="Machakos">Machakos</option>
+        <option value="Makindu">Makindu</option>
+        <option value="Malindi">Malindi</option>
+        <option value="Mandera">Mandera</option>
+        <option value="Maralal">Maralal</option>
+        <option value="Marsabit">Marsabit</option>
+        <option value="Meru">Meru</option>
+        <option value="Mombasa">Mombasa</option>
+        <option value="Moyale">Moyale</option>
+        <option value="Mumias">Mumias</option>
+        <option value="Muranga">Muranga</option>
+        <option value="Mutomo">Mutomo</option>
+        <option value="Nairobi">Nairobi</option>
+        <option value="Naivasha">Naivasha</option>
+        <option value="Nakuru">Nakuru</option>
+        <option value="Namanga">Namanga</option>
+        <option value="Nanyuki">Nanyuki</option>
+        <option value="Naro Moru">Naro Moru</option>
+        <option value="Narok">Narok</option>
+        <option value="Nyahururu">Nyahururu</option>
+        <option value="Nyeri">Nyeri</option>
+        <option value="Ruiru">Ruiru</option>
+        <option value="Shimoni">Shimoni</option>
+        <option value="Takaungu">Takaungu</option>
+        <option value="Thika">Thika</option>
+        <option value="Vihiga">Vihiga</option>
+        <option value="Voi">Voi</option>
+        <option value="Wajir">Wajir</option>
+        <option value="Watamu">Watamu</option>
+        <option value="Webuye">Webuye</option>
+        <option value="Wote">Wote</option>
+        <option value="Wundanyi">Wundanyi</option>
+    </select>
+
+    <label for="blood_type">Blood Type</label>
+    <select id="blood_type" name="blood_type" required>
+        <option value="value">Choose Blood Type</option>
+        <option value="o-positive">O Positive</option>
+        <option value="o-negative">O Negative</option>
+        <option value="a-positive">A Positive</option>
+        <option value="a-negative">A Negative</option>
+        <option value="b-positive">B Positive</option>
+        <option value="b-negative">B Negative</option>
+        <option value="ab-psitive">AB Positive</option>
+        <option value="ab-negative">AB Negative</option>
+        
+    </select><br>
+
+    <label for="availability">Availability</label>
+    <select id="availability" name="availability" required>
+        <option value="one">Choose days you are available</option>
+        <option value="one">Any Day</option>
+        <option value="two">Week Days</option>
+        <option value="three">Weekends</option>
+    </select><br>
+
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password"  required>
+
+    <label for="password">Confirm password</label>
+    <input type="confirm_password" id="confirm_password" name="confirm_pasword" required>
+
+    <input type="submit" class="first-button" value="Submit" />
+  
+  </form>
+</div>   
+<div class="policy">   
+  <p>
+    By clicking the Sign Up button,you agree to our 
+    Terms and Condition and <a href="#">Policy Privacy</a>
+  </p>
+</div>
+  
+  </body>
+  <footer>
+		<div class="footer">
+			<h3>
+			**Contact us**
+			</h3>
+			<h5>Tel. 0225468376
+			<a href = "mailto:kimanitimothy642@gmail.com?subject = Feedback&body = Message">
+				@naiduhospitalgmail.com
+				</a></h5>
+			<h4>
+			&copy; 2023, Created for Naidu Hospital
+			
+			
+			<a href="#" class="fa fa-facebook"></a>
+			<a href="#" class="fa fa-twitter"></a></h4>
+		</div>
+	</footer>
+  </html>

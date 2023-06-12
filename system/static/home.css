@@ -1,91 +1,41 @@
 body {
 	margin: 0;
 	padding: 0;
-	font-family: Arial, sans-serif;
+	font-family: "Trirong", serif;
 	
 }
 
-header {
-	background-color: #fff;
-	padding: 1px;
-	position: fixed;
-	width: 100%;
-	
-}
-
-nav {
+.nav-bar{
 	display: flex;
-	align-items: center;
+	flex-direction: row;
 	justify-content: space-between;
-}
-
-nav ul {
-	list-style: none;
-	margin: 0;
-	padding: 0;
-	display: flex;
-	
-}
-
-nav ul li {
-	margin: 0 20px;
-	
-	padding: 0px 10px;
-	color: #fff;
-	border-radius: 5px;
-}
-
-nav ul li a {
-	
-	text-decoration: none;
-	font-size: 18px;
-}
-
-.log-in {
-	display: flex;
 	align-items: center;
+	height: 70px;
+	
+	padding: 0 40px;
+	font-family: Verdana, Geneva, Tahoma, sans-serif;
+	background-color: #f5f5f5;
+
+}
+.nav-text{
+	font-size: 22px;
+}
+.nav-link ul li{
+	display: inline-block;
+	/* line-height: 50px; */
 	padding: 20px;
-}
-
-
-.log-in a {
-	margin-left: 20px;
-	background: linear-gradient(to bottom, rgb(232, 9, 9) 0%, #790b42 100%);
-	color: #fff;
-	padding: 10px 20px;
-	border-radius: 5px;
+}	
+.nav-link ul li a{
 	text-decoration: none;
-	font-size: 16px;
+	color: #000;
+	cursor: pointer;
+	font-size: 1em;
 }
 
-.hero {
-	background: linear-gradient(to bottom, rgb(232, 9, 9) 0%, #d21609 100%);
-	background-size: cover;
-	height: 200px;
-	display: flex;
-	align-items: center;
-}
-
-.hero-text {
-	color: #fff;
-	padding: 10px;
-}
-
-.hero-text h1 {
-	font-size: 30px;
-	margin: 0;
-}
-
-.hero-text p {
-	font-size: 20px;
-	margin: 0;
-}
-.text h1{
-	float: right;
-}
 .donation-info {
-	background-color: beige;
+	
 	padding: 50px;
+
 }
 .donation-info h2 {
 	font-size: 40px;
@@ -95,7 +45,7 @@ nav ul li a {
 }
 
 .donation-info p {
-	font-size: 22px;
+	font-size: 21px;
 	line-height: 1.5;
 	margin-left: 2cm;
 	padding: 20px;
@@ -103,7 +53,7 @@ nav ul li a {
 	margin-right: 5%;
 }
 .donation-info2 {
-	background-color: beige;
+	
 	padding: 50px;
 }
 .donation-info2 h2 {
@@ -114,15 +64,13 @@ nav ul li a {
 }
 
 .donation-info2 p {
-	font-size: 22px;
+	font-size: 21px;
 	line-height: 1.5;
 	margin-right: 50%;
 	padding: 20px;
 }
 
-.donation-info3 {
-	background-color: beige;
-	padding: 50px;
+.donation-info3 {padding: 50px;
 }
 .donation-info3 h2 {
 	font-size: 40px;
@@ -131,7 +79,7 @@ nav ul li a {
 }
 
 .donation-info3 p {
-	font-size: 22px;
+	font-size: 21px;
 	line-height: 1.5;
 	padding: 20px;
 	margin-left: 50%;
@@ -139,7 +87,6 @@ nav ul li a {
 	
 }
 .donation-info4 {
-	background-color: beige;
 	padding: 50px;
 }
 .donation-info4 h2 {
@@ -173,7 +120,7 @@ nav ul li a {
 }
 
 
-input[type=text],input[type=email]{
+input[type=text], input[type=email], select{
 	width: 100%;
 	padding: 12px 20px;
 	margin: 8px 0;
@@ -181,7 +128,9 @@ input[type=text],input[type=email]{
 	border: 1px solid #ccc;
 	border-radius: 4px;
 	box-sizing: border-box;
-}
+	height: 20px;
+    
+  }
 form{
 	width: 50%;
 	padding: 10px 10px 10px 150px;
@@ -283,4 +232,82 @@ footer {
     margin-left: 20%;
     border-radius: 5px;
     cursor: pointer;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+  /* Full-width input fields */
+input[type=text], input[type=password] {
+	width: 100%;
+	padding: 0;
+	margin: 8px 0;
+	display: inline-block;
+	border: 1px solid #ccc;
+	box-sizing: border-box;
+  }
+
+  /* The Modal (background) */
+  .modal {
+	display: none; /* Hidden by default */
+	position: fixed; /* Stay in place */
+	z-index: 1; /* Sit on top */
+	left: 30%;
+	top: 30px;
+	 width: 50%;/* Full width */
+	/* Full height */
+	overflow: auto; /* Enable scroll if needed */
+	 /* Black w/ opacity */
+	padding-top: 10px;
+	padding-left: 10px;
+	background-color: #aeb5ae;
+	border-radius: 7px;
+  }
+  
+  
+  /* The Close Button (x) */
+  .close {
+	position: absolute;
+	right: 25px;
+	top: 0;
+	color: #000;
+	font-size: 35px;
+	font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+	color: red;
+	cursor: pointer;
+  }
+  
+ 
+  @-webkit-keyframes animatezoom {
+	from {-webkit-transform: scale(0)} 
+	to {-webkit-transform: scale(1)}
+  }
+	
+  @keyframes animatezoom {
+	from {transform: scale(0)} 
+	to {transform: scale(1)}
+  }
+  
+  /* Change styles for span and cancel button on extra small screens */
+  @media screen and (max-width: 300px) {
+	span.psw {
+	   display: block;
+	   float: none;
+	}
+	.cancelbtn {
+	   width: 100%;
+	}
   }

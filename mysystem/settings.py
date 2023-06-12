@@ -81,8 +81,12 @@ WSGI_APPLICATION = 'mysystem.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'mysystem',
+        'USER': 'root',
+        'PASSWORD': '20n7sunb01',
+        'PORT': 3306,
+        'HOST': '127.0.0.1',
     }
 }
 
@@ -127,3 +131,16 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+LOGIN_REDIRECT_URL = 'dashboard'
+LOGIN_URL = "login"
+LOGOUT_URL = "logout"
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    # 'system.authentication.EmailAuthBackend',
+]
