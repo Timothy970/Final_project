@@ -1,0 +1,112 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel ="stylesheet" href="{% static 'home.css' %}">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<title>Terms and Conditions</title>
+<style>
+body {
+  font-family: sans-serif;
+  font-size: 16px;
+}
+
+h1 {
+  font-size: 20px;
+  margin-top: 0;
+}
+
+p {
+  margin-bottom: 10px;
+}
+
+ul {
+  list-style-type: disc;
+  margin-left: 20px;
+}
+
+a {
+  text-decoration: none;
+  color: blue;
+}
+</style>
+</head>
+<body>
+    <nav class="nav-bar">
+		<div class="nav-text">
+			<h1>Blood Heroes</h1>
+		</div>
+		<div class="nav-link">
+			<ul>
+				<li><a href="{% url 'home' %}">Home</a></li>
+				<li><a href="{% url 'register' %}">Register</a></li>
+				{% comment %} <li><a href="{% url 'login' %}">Look for Donor</a></li> {% endcomment %}
+				<li><a href="{% url 'login' %}">Login</a></li>
+				
+			</ul>
+		</div>	
+	</nav>
+<h1>Terms and Conditions</h1>
+
+<p>By using this website, you agree to the following terms and conditions:</p>
+
+<ul>
+<li>You must be at least 16 years old to use this website.</li>
+<li>You must provide accurate and up-to-date information about yourself.</li>
+<li>You must not use this website for any illegal or harmful purposes.</li>
+<li>You must not post any content that is offensive or discriminatory.</li>
+<li>You agree to be bound by the decisions of the website's administrators.</li>
+</ul>
+
+<p>If you violate any of these terms and conditions, your account may be terminated.</p>
+
+<hr>
+
+<h2>Additional Terms and Conditions for Donors</h2>
+
+<ul>
+<li>You must be a blood donor who is in good health and eligible to donate blood.</li>
+<li>You must be willing to donate blood to a recipient who is in need.</li>
+<li>You must be willing to provide your contact information to the recipient so that they can contact you if they have any questions or concerns.</li>
+</ul>
+
+<hr>
+
+<h2>Additional Terms and Conditions for Recipients</h2>
+
+<ul>
+<li>You must be a person who is in need of blood.</li>
+<li>You must be willing to provide your contact information to the donor so that they can contact you if they have any questions or concerns.</li>
+<li>You agree to follow the instructions of the donor and the website's administrators.</li>
+</ul>
+
+<hr>
+
+<h2>Contact Information</h2>
+
+<p>If you have any questions or concerns about these terms and conditions, please contact us.
+</p>
+</body>
+<footer>
+    <div class="footer">
+        <h3>
+        **Contact us**
+        </h3>
+        <h5>Tel. 0225468376
+        <a href = "mailto:kimanitimothy642@gmail.com?subject = Feedback&body = Message">
+            @naiduhospitalgmail.com
+            </a></h5>
+        <h4>
+        &copy; 2023, Created for Naidu Hospital
+        <a href="https://api.whatsapp.com/send?phone=+254746166343" class="fa fa-whatsapp"></a>	
+        
+        <a href="#" class="fa fa-facebook"></a>
+        <a href="#" class="fa fa-twitter"></a></h4>
+    </div>
+</footer>
+</html>

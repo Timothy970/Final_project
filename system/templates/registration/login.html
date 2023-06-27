@@ -11,11 +11,11 @@
 {% block content %}
   <body > 
     <div class="log-in">
-      <h1>Log In</h1>
+      {% comment %} <h1>Log In</h1> {% endcomment %}
       {% if forms.errors %}
         <p>Your Username and Password didn't match.<br>Please try again</p>
       {% else %}  
-        <p>Please, use the following form to log-in:</p>
+        {% comment %} <p>Please, use the following form to log-in:</p> {% endcomment %}
         <p> If you don't have an account <a class="link" href="{% url "register" %}">register here</a></p>
       {% endif %}  
     </div>

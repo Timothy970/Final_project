@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Appointment</title>
+    {% comment %} <link rel ="stylesheet" href="{% 'css/home.css' %}"> {% endcomment %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Trirong", serif;
+            
+        }
+        
+        .nav-bar{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+            
+            padding: 0 40px;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            background-color: #f5f5f5;
+        
+        }
+        .nav-text{
+            font-size: 22px;
+        }
+        .nav-text p{
+            font-size: 10px;
+        }
+        .nav-link ul li{
+            display: inline-block;
+            /* line-height: 50px; */
+            padding: 20px;
+        }	
+        .nav-link ul li a{
+            text-decoration: none;
+            color: #000;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        @media screen and (max-width:600px) {
+            .nav-bar{
+                padding: 0 20px;
+            }
+            .nav-text{
+                font-size: 12px;
+            }
+            .nav-text p{
+                font-size: 6px;
+            }
+            .nav-link ul li{
+                padding: 5px
+            }
+        }
+        form{
+            background-color: #f2f2f2;
+            padding: 20px;
+            border-radius: 7px;
+            width: 300px;
+            margin-left: 40px;
+            margin-bottom: 20px;
+        }
+        form label{
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 20px;
+        }
+        form input[type="text"], form input[type="date"], form input[type="time"]{
+            width: 90%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            font-size: 18px;
+        }
+        form button[type="submit"]{
+            background-color: blue;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            align: center;
+            left: 30px;
+        }
+        form button[type="submit"]: hover{
+            background-color: green;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav-bar">
+		<div class="nav-text">
+			<h1>Blood Heroes</h1>
+            
+		</div>
+		<div class="nav-link">
+			<ul>
+        <li><a href="{% url 'view_profiles' %}">Contact Donors</a></li>
+				{% comment %} <li><a href="{% url 'register' %}">Register as Donor</a></li> {% endcomment %}
+				{% comment %} <li><a href="{% url 'login' %}">Look for Donor</a></li> {% endcomment %}
+				<li><a href="{% url 'home' %}">Logout</a></li>
+				
+			</ul>
+		</div>	
+	</nav>
+    <h1>Book Appointment</h1>
+    
+    <form method="POST" action="{% url 'book_appointment' %}">
+        {% csrf_token %}
+        
+        {{ form.as_p }}
+       
+        <button type="submit" onclick="return confirm('Are you sure want to book?')">Book Appointment</button>
+    </form>
+    {% if confirmation_message %}
+    <p>{{ confirmation_message }}</p>
+    {% endif %}
+</body>
+</html>

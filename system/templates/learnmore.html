@@ -1,50 +1,109 @@
-{% extends 'home.html' %} 
 {% load static %}
-{% block content %}
-{% block main %}
-    
-{% endblock %}
-<div class="learnmore_text">
-  <h2>Blood Donation Eligibility</h2>
-  <h3>Any healthy adult, both male and female, can donate every three months</h3>
-  <div class="intro_eligibility">
-  <img class="img_request" id="img_eligibility" src="{% static 'blood3.jpg' %}" alt="need of blood">
-  <p>You may be wondering if you can
-    donate blood. Donating blood is 
-    safe and easy to do. If you're in 
-    good health and meet the general 
-    eligibility criteria, then you are likely able to give blood. If you meet all eligibility criteria
-    below, please register today today to transform the lives of patients in need</p></div>
-  <p>Good health of the donor must be fully ensured. The universally accepted criteria for donor selection are:</p>
-    <div class="eligibility_list">
-      <p><i class='fa fa-heart'></i>Age between 18 and 60 years</p>
-      <p><i class="fa fa-heart"></i> Haemoglobin - not less than 12.5 g/Dl</p>
-      <p><i class="fa fa-heart"></i> Pulse - between 50 and 100/minute with no irregularities</p>
-      <p><i class='fa fa-heart'></i>Blood Pressure -Systolic 100-180 mm Hg and Diastolic 50 - 100 mm Hg</p>
-      <p><i class='fa fa-heart'></i>Temperature - Normal (oral temperature not exceeding 37.50C)</p>
-      <p><i class='fa fa-heart'></i>Body weight - not less than 45 Kg</p>
-      </div>
-    <p>Health conditions: The donor should be in a healthy state of mind and body.</p>
-    
-    <p>They should fulfill the following criteria:</p>
-    <div class="eligibility_list">
-      <p><i class='fa fa-heart'></i>Past one year - not been treated for Rabies or received Hepatitis B immune globulin.</p>
-      <p><i class='fa fa-heart'></i>Past six months - not had a tattoo, ear or skin piercing or acupuncture,no serious illness or major surgery, no contact with a person with hepatitis or yellow jaundice.</p>
-      <p><i class='fa fa-heart'></i> Past three months - not donated blood or been treated for Malaria.</p>
-      <p><i class='fa fa-heart'></i> Past one month - had any immunizations.</p>
-      <p><i class='fa fa-heart'></i> 5. Past 48 hours - taken any antibiotics or any other medications (Allopathic or Ayurveda or Sidha or Homeo)</p>
-      <p><i class='fa fa-heart'></i> Past 24 hours - taken alcoholic beverages</p>
-      <p><i class='fa fa-heart'></i>Past 72 hours - had dental work or taken Aspirin</p>
-      <p><i class='fa fa-heart'></i>Present - not suffering from cough, influenza or sore throat, common cold</p>
-      <p><i class='fa fa-heart'></i>Women should not be pregnant or breast feeding her child</p>
-      <p><i class='fa fa-heart'></i>Women donor should not donate during her menstrual cycles</p>
-      <p><i class='fa fa-heart'></i>Free from Diabetes, not suffering from chest pain, heart disease or high BP, cancer, blood clotting problem or blood disease, unexplained fever, weight loss, fatigue, night sweats, enlarged lymph nodes in armpits, neck or groin, white patches in the mouth etc.</p>
-      <p><i class='fa fa-heart'></i>Ever had TB, bronchial asthma or allergic disorder, liver disease, kidney disease, fits or fainting, blue or purple spots on the skin or mucous membranes, received human pituitary - growth hormones etc .</p>
-    </di>
-</div>
 
-<div class="center">
-  <button class="first-button" onclick="window.location.href = {% url 'login'%}">DONATE NOW</button>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<link rel ="stylesheet" href="{% static 'home.css' %}">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<title>Blood Donation Eligibility Criteria</title>
+<style>
+body {
+  font-family: sans-serif;
+  font-size: 16px;
+  margin: 10px;
+}
 
-  {% endblock %}
+h1 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+ul {
+  list-style-type: disc;
+  margin-left: 20px;
+}
+
+li {
+  margin-bottom: 5px;
+}
+
+a {
+  text-decoration: none;
+}
+
+@media (max-width: 768px) {
+  body {
+    font-size: 14px;
+  }
+}
+</style>
+<nav class="nav-bar">
+  <div class="nav-text">
+    <h1>Blood Heroes</h1>
+  </div>
+  <div class="nav-link">
+    <ul>
+      <li><a href="{% url 'home' %}">Home</a></li>
+      <li><a href="{% url 'register' %}">Register</a></li>
+      {% comment %} <li><a href="{% url 'login' %}">Look for Donor</a></li> {% endcomment %}
+      <li><a href="{% url 'login' %}">Login</a></li>
+      
+    </ul>
+  </div>	
+</nav>
+</head>
+<body>
+  <h1>Blood Donation Eligibility Criteria</h1>
+  <p>Blood donation is a safe and simple way to help save lives. However, there are some eligibility criteria that must be met in order to donate blood.</p>
+  <h2>General Eligibility Criteria</h2>
+  <ul>
+    <li>You must be at least 17 years old (or 16 years old with parental consent, depending on state law).</li>
+    <li>You must weigh at least 110 pounds (50 kilograms).</li>
+    <li>You must be in good health and feeling well on the day of donation.</li>
+    <li>You must have a valid ID.</li>
+  </ul>
+  <h2>Specific Eligibility Criteria</h2>
+  <ul>
+    <li>You cannot donate blood if you have a cold, flu, or other infection.</li>
+    <li>You cannot donate blood if you have recently been tattooed or pierced.</li>
+    <li>You cannot donate blood if you have recently received a blood transfusion.</li>
+    <li>You cannot donate blood if you have recently traveled to a country with a high risk of malaria or other infectious diseases.</li>
+  </ul>
+  <h2>How to Donate Blood</h2>
+  <p>If you meet the eligibility criteria, you can donate blood at a blood donation center. The donation process is typically very quick and easy.</p>
+  <p>First, you will be asked to complete a health history questionnaire. Then, you will have your blood pressure, pulse, and temperature checked. You will also have a small blood sample drawn to test for anemia.</p>
+  <p>If you pass all of the screening tests, you will be able to donate blood. The donation process itself takes about 15 minutes.</p>
+  <p>After you donate blood, you will be asked to rest for a few minutes. You will also be given a snack and a drink.</p>
+  <h2>The Importance of Blood Donation</h2>
+  <p>Blood donation is an important way to help save lives. Blood is needed for a variety of medical procedures, including surgery, childbirth, and treatment of trauma.</p>
+  <p>If you are able to donate blood, please consider doing so. Your donation could help save a life.</p>
+</body>
+<footer>
+  <div class="footer">
+      <h3>
+      **Contact us**
+      </h3>
+      <h5>Tel. 0225468376
+      <a href = "mailto:kimanitimothy642@gmail.com?subject = Feedback&body = Message">
+          @naiduhospitalgmail.com
+          </a></h5>
+      <h4>
+      &copy; 2023, Created for Naidu Hospital
+      
+      <a href="https://api.whatsapp.com/send?phone=+254746166343" class="fa fa-whatsapp"></a>	
+      <a href="#" class="fa fa-facebook"></a>
+      <a href="#" class="fa fa-twitter"></a></h4>
+  </div>
+</footer>
+</html>
+
+</html>

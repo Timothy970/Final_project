@@ -1,6 +1,7 @@
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
 from . import views
+# from system.routing import websocket_urlpatterns
 
 urlpatterns = [
     path('',views.home, name='home'),
@@ -22,4 +23,16 @@ urlpatterns = [
     path('', include('django.contrib.auth.urls')),
     path('register/', views.register, name='register'),
     path('edit/', views.edit, name='edit'),
-]
+    # path('recipientregister/', views.recipientregister, name='recipientregister'),
+    # path('loginrecipient/', auth_views.LoginView.as_view(), name='loginrecipient'),
+    path('terms/', views.terms, name='terms'),
+    
+    path('schedule/', views.view_bookings, name='schedule'),
+    path('bookings/delete/<int:booking_id>/', views.delete_booking, name='delete_booking',),
+    path('book/', views.blood_donation_booking, name='book_appointment'),
+    path('profiles/', views.view_profiles, name='view_profiles'),
+    
+    path('chat/<int:user_id>/', views.chat, name='chat'),
+    path('send_message/', views.send_message, name='send_message')
+    
+]  

@@ -1,0 +1,105 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Profiles</title>
+	<link rel ="stylesheet" href="{% static 'profile.css' %}">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+ 
+</head>
+<body>
+	<nav class="nav-bar">
+		<div class="nav-text">
+			<h1>Blood Heroes</h1>
+            
+		</div>
+		<div class="nav-link">
+			<ul>
+				
+				<li><a href="{% url 'home' %}">Logout</a></li>
+				
+			</ul>
+		</div>	
+	</nav>
+
+
+
+
+  
+  <h1>User Profiles</h1>
+  <div class="search">
+    <div class="search-container">
+      <label for="name-search">Search by Name:</label>
+      <input type="text" id="name-search" name="name-search" placeholder="Enter name">
+    </div>
+    <div class="search-container">
+      <label for="city-search">Search by City:</label>
+      <input type="text" id="city-search" name="city-search" placeholder="Enter city name">
+    </div>
+  </div><br>
+  
+  <div class="user-container">
+    <ul>
+      {% for profile in profiles %}
+      <li>
+        <h2>{{ profile.user.first_name }}</h2>
+        <h2>{{ profile.user.last_name }}</h2>
+        {% comment %} <h2>{{ profile.user.first_name }}</h2> {% endcomment %}
+        <h2>{{ profile.city }}</h2>
+        <p>Date of Birth: {{ profile.date_of_birth }}
+        <a href="{% url 'chat' profile.user.id %}">
+        chat
+        </a></p>
+        <a href="https://wa.me/0790351770?text=Hello%20there,%20Blood%20Heroe,%20I%20want%20to%20kindly%20chat%20you%20about%20potential%20blood%20donation." target = "blank" class="fa fa-whatsapp"></a>
+      </li>
+      {% empty %}
+      <li>
+        No profiles available
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <script>
+    const nameSearchInput = document.getElementById('name-search');
+    const citySearchInput = document.getElementById('city-search');
+    const profileList = document.querySelectorAll('.user-container ul li');
+
+    nameSearchInput.addEventListener('input', () => {
+        filterProfiles();
+    });
+
+    citySearchInput.addEventListener('input', () => {
+        filterProfiles();
+    });
+
+    function filterProfiles() {
+        const nameSearchValue = nameSearchInput.value.trim().toLowerCase();
+        const citySearchValue = citySearchInput.value.trim().toLowerCase();
+
+        profileList.forEach((profile) => {
+            const firstName = profile.querySelector('h2:nth-child(1)').textContent.toLowerCase();
+            const lastName = profile.querySelector('h2:nth-child(2)').textContent.toLowerCase();
+            const cityName = profile.querySelector('h2:nth-child(3)').textContent.toLowerCase();
+
+            if (
+                (firstName.includes(nameSearchValue) || lastName.includes(nameSearchValue))
+                && cityName.includes(citySearchValue)
+            ) {
+                profile.style.display = 'block';
+            } else {
+                profile.style.display = 'none';
+            }
+        });
+    }
+
+
+
+      
+</script>
+
+</body>
+</html>

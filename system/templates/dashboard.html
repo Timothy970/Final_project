@@ -1,7 +1,76 @@
-{% extends "home.html" %}
-{% block title %}Dashboard{% endblock %}
+{% load static %}
 
-{% block content %}
-<h1>Dashboard</h1>
-<p>Welcome to your Dashboard</p>
-{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Dashboard</title>
+	<link rel ="stylesheet" href="{% static 'dashboard.css' %}">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+	<nav class="nav-bar">
+		<div class="nav-text">
+			<h1>Blood Heroes</h1>
+            
+		</div>
+		<div class="nav-link">
+			<ul>
+        <li><a href="{% url 'view_profiles' %}">Contact Donors</a></li>
+				{% comment %} <li><a href="{% url 'register' %}">Register as Donor</a></li> {% endcomment %}
+				{% comment %} <li><a href="{% url 'login' %}">Look for Donor</a></li> {% endcomment %}
+				<li><a href="{% url 'home' %}">Logout</a></li>
+				
+			</ul>
+		</div>	
+	</nav>
+
+
+  
+  <div class="profile_container">
+    <nav class="nav_profile">
+      <ul>
+        <li><p href="#" class="logo">
+          {% if user.profile.photo %}
+          <img src="{{ user.profile.photo.url }}" alt="">
+          {% else %}
+          <img src="/logo.jpg" alt=""
+          {% endif %}
+          <span class="nav-item1">Welcome <br>{{ user.first_name }}</span>
+        </p></li>
+        {% comment %} <li><a href="#">
+          <i class="fa fa-home"></i>
+          <span  class="nav-item">My Profile</span>
+        </a></li> {% endcomment %}
+        <li><a href="{% url "edit" %}">
+          <i class="fa fa-user"></i>
+          <span class="nav-item">Edit Profile</a></span>
+        </a></li>
+        <li><a href="{% url "book_appointment" %}">
+          <i class="fa fa-book"></i>
+          <span class="nav-item">Book Donation</a></span>
+        </a></li>
+        <li><a href="{% url "schedule" %}">
+          <i class="fa fa-trash"></i>
+          <span class="nav-item">Delete Booking</a></span>
+        </a></li>
+        
+      
+        <li><a href="{% url 'home'%}" class="logout">
+          <i class="fas fa-sign-out-alt"></i>
+          <span class="nav-item">Log out</span>
+        </a></li>
+      </ul>
+    </nav>
+  </div> 
+<div class="content">
+  <h3>Welcome to your Blood Heroes account</h3>
+  <h4>Thank you for registering with us. Blood saves lives and that why we are Blood Heroes</h4>
+  <p>Edit your profile so that others can see your details and be able to see others profiles</p>
+  {% comment %} <h5><a href="edit.html" target="blank">Edit profile</a></h4> {% endcomment %}
+  <p>Here at Blood Heroes we try to bring together and create a community of potential blood donors. You can register to just donate at our blood camps. Also you can register to contact other donors if you know a person in need of blood donation.</p>
+  <p>Since you have registered your self as potential donor you can book for a donation with us. Similarly if you are looking for potential donors, you contact other donors, communicate with them, and book a schedule. Incase of emergencies, you can communicate with nearby potential donors who match with the recipient's blood and organize how to come to as as fast as possible. You can also contact us to hire an ambulance.</p>
+</div>
+</body>
+</html>

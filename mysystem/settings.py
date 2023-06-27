@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-a-kb5he+9l==a$3640_2eq60*27093&z_8txhn@a=2+bzryb-^
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 STATIC_ROOT = BASE_DIR/ 'staticfiles'
 
@@ -35,6 +35,8 @@ STATIC_URL = 'static/'
 # Application definition
 
 INSTALLED_APPS = [
+    # 'channels',
+    # 'system.apps.SystemConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,6 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'system'
+
+    
 ]
 
 MIDDLEWARE = [
@@ -52,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'channels.middleware.AuthMiddlewareStack',
     
 ]
 
@@ -75,6 +80,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'mysystem.wsgi.application'
 
+ASGI_APPLICATION = 'mysystem.asgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
@@ -82,7 +88,7 @@ WSGI_APPLICATION = 'mysystem.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'mysystem',
+        'NAME': 'mydata',
         'USER': 'root',
         'PASSWORD': '20n7sunb01',
         'PORT': 3306,
@@ -126,6 +132,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')/
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -144,3 +155,11 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     # 'system.authentication.EmailAuthBackend',
 ]
+
+# AUTH_USER_MODEL = 'auth.User'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    },
+}
