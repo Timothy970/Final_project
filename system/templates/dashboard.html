@@ -17,6 +17,12 @@
 		</div>
 		<div class="nav-link">
 			<ul>
+        <li>
+          <a href="#" id="bell-icon">
+            <i class="fa fa-bell"></i>
+            <span id="notification-count"></span> Requests
+          </a>
+        </li>
         <li><a href="{% url 'view_profiles' %}">Contact Donors</a></li>
 				{% comment %} <li><a href="{% url 'register' %}">Register as Donor</a></li> {% endcomment %}
 				{% comment %} <li><a href="{% url 'login' %}">Look for Donor</a></li> {% endcomment %}
@@ -53,10 +59,17 @@
         </a></li>
         <li><a href="{% url "schedule" %}">
           <i class="fa fa-trash"></i>
-          <span class="nav-item">Delete Booking</a></span>
+          <span class="nav-item">Cancel Booking</a></span>
+        </a></li>
+        <li><a href="{% url "donation_report" %}">
+          <i class="fa fa-file"></i>
+          <span class="nav-item">Donations Report</a></span>
         </a></li>
         
-      
+        <li><a href="{% url "reward_certificate" %}">
+          <i class="fa fa-gift"></i>
+          <span class="nav-item">Rewards</a></span>
+        </a></li>
         <li><a href="{% url 'home'%}" class="logout">
           <i class="fas fa-sign-out-alt"></i>
           <span class="nav-item">Log out</span>
@@ -72,5 +85,71 @@
   <p>Here at Blood Heroes we try to bring together and create a community of potential blood donors. You can register to just donate at our blood camps. Also you can register to contact other donors if you know a person in need of blood donation.</p>
   <p>Since you have registered your self as potential donor you can book for a donation with us. Similarly if you are looking for potential donors, you contact other donors, communicate with them, and book a schedule. Incase of emergencies, you can communicate with nearby potential donors who match with the recipient's blood and organize how to come to as as fast as possible. You can also contact us to hire an ambulance.</p>
 </div>
+
+
+<!-- Include jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<script>
+  // Variable to store the previous count
+  var previousCount = 0;
+
+  // Variable to track initial page load
+  var initialLoad = true;
+
+  // Function to fetch and update the blood request count
+  function updateBloodRequestCount() {
+    $.ajax({
+      url: "{% url 'blood_request_count' %}",
+      dataType: 'json',
+      success: function(data) {
+        // Get the current count
+        var currentCount = data.count;
+
+        // Update the count in the bell icon
+        $('#notification-count').text(currentCount);
+
+        // Check if the count has incremented and it's not the initial load
+        if (currentCount > previousCount && !initialLoad) {
+          // Show a notification message
+          var message = 'Another request made!';
+          showNotification(message);
+        }
+
+        // Update the previous count
+        previousCount = currentCount;
+
+        // Update the initial load flag
+        initialLoad = false;
+      }
+    });
+  }
+
+  // Function to show a notification
+  function showNotification(message) {
+    if (Notification.permission === 'granted') {
+      new Notification(message);
+    } else if (Notification.permission !== 'denied') {
+      Notification.requestPermission(function (permission) {
+        if (permission === 'granted') {
+          new Notification(message);
+        }
+      });
+    }
+  }
+
+  // Event listener for bell icon click
+  $('#bell-icon').click(function() {
+    window.location.href = "{% url 'blood_requests' %}";
+  });
+
+  // Call the function initially to set the initial count
+  updateBloodRequestCount();
+
+  // Call the function periodically to update the count
+  setInterval(updateBloodRequestCount, 5000); // Update every 5 seconds (adjust as needed)
+</script>
+
+
 </body>
 </html>

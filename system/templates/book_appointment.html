@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book Appointment</title>
-    {% comment %} <link rel ="stylesheet" href="{% 'css/home.css' %}"> {% endcomment %}
+    
+    <script type="text/javascript" src="/static/admin/js/core.js"></script>
+    <script type="text/javascript" src="/static/admin/js/SelectBox.js"></script>
+    <script type="text/javascript" src="/static/admin/js/SelectFilter2.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
         body {
@@ -71,7 +74,7 @@
             font-weight: bold;
             font-size: 20px;
         }
-        form input[type="text"], form input[type="date"], form input[type="time"]{
+        form input[type="text"], form input[type="date"], input[type="time"]{
             width: 90%;
             padding: 10px;
             margin-bottom: 10px;
@@ -84,14 +87,63 @@
             padding: 10px 20px;
             border-radius: 4px;
             cursor: pointer;
-            align: center;
+            
             left: 30px;
         }
-        form button[type="submit"]: hover{
-            background-color: green;
-            color: red;
+        form button[type="submit"]:hover {
+        background-color: green;
+        color: red;
+        }
+                /* Set the font size and weight */
+        input[type=time] {
+        font-size: 16px;
+        font-weight: 400;
+        }
+
+        /* Remove the default arrow icon */
+        input[type=time]::-webkit-calendar-picker-indicator {
+        display: none;
+        }
+
+        /* Add a custom arrow icon */
+        input[type=time]::after {
+        content: "\25BC";
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        font-size: 12px;
+        pointer-events: none;
+        }
+
+        /* Set the dropdown menu styles */
+        .select-time-dropdown {
+        position: absolute;
+        z-index: 1;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        max-height: 200px;
+        overflow-y: auto;
+        }
+
+        /* Set the dropdown menu item styles */
+        .select-time-dropdown option {
+        padding: 5px;
+        font-size: 14px;
+        font-weight: 400;
+        color: #333;
+        cursor: pointer;
+        }
+
+        /* Set the active dropdown menu item styles */
+        .select-time-dropdown option:checked {
+        background-color: #007bff;
+        color: #fff;
         }
     </style>
+    {{ form.media }}
+
 </head>
 <body>
     <nav class="nav-bar">

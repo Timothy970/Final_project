@@ -4,9 +4,12 @@ from django.contrib.auth.models import User
 import datetime
 from django.forms import ValidationError
 from .models import Profile, BloodDonationBooking
-# import phonenumbers
+import phonenumbers
+from datetime import date 
 # from.phonenumbers.phonenumberutil import PhoneNumberFormat
-# from phonenumbers import parse, is_valid_number
+from .models import BloodRequest
+
+
 
 gender_choices = (
     ('M', 'Male'),
@@ -146,10 +149,31 @@ class UserEditForm(forms.ModelForm):
             raise forms.ValidationError('Email already in use.')
         return data
 
+
 class ProfileEditForm(forms.ModelForm):
+
     class Meta:
         model = Profile
-        fields = ['date_of_birth', 'photo','availability','gender', 'blood_type', 'city']
+        fields = ['date_of_birth', 'photo','availability','gender', 'blood_type', 'city', 'phone_number']
+        widgets = {
+            'date_of_birth': forms.DateInput(attrs={'type': 'date'}),
+        }
+    def clean_phone_number(self):
+        phone_number = self.cleaned_data['phone_number']
+        if not phone_number:
+            raise forms.ValidationError('Phone number is required')
+        return phone_number
+
+    def get_whatsapp_link(self):
+        if self.is_valid():
+            cleaned_data = self.cleaned_data
+            phone_number = cleaned_data.get('phone_number')
+
+            if phone_number:
+                whatsapp_number = f"{phone_number}"
+                return f"https://api.whatsapp.com/send?phone={whatsapp_number}"
+        return None
+
 class RecipientRegistrationForm(forms.ModelForm): 
     password = forms.CharField(label='Password', widget=forms.PasswordInput) 
     password2 = forms.CharField(label='Confirmed password', widget=forms.PasswordInput)
@@ -183,14 +207,31 @@ class RecipientRegistrationForm(forms.ModelForm):
             raise forms.ValidationError('Email already in use.')
         return data
             
-            
-from django import forms
+from django.forms.widgets import Select
+
+class HourIntervalSelectWidget(Select):
+    def __init__(self, attrs=None):
+        intervals = [
+            ("08:00", "08:00 AM"),
+            ("09:00", "09:00 AM"),
+            ("10:00", "10:00 AM"),
+            ("11:00", "11:00 AM"),
+            ("12:00", "12:00 PM"),
+            ("13:00", "1:00 PM"),
+            ("14:00", "2:00 PM"),
+            ("15:00", "3:00 PM"),
+            ("16:00", "4:00 PM"),
+            # Add more hour intervals as needed
+        ]
+        super().__init__(attrs, choices=intervals)   
+
 
 class BloodDonationForm(forms.ModelForm):
+    
     first_name = forms.CharField(required=True, label='First Name')
     last_name = forms.CharField(required=True, label='Last Name')
     date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
-    time = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time'}))
+    time = forms.TimeField(widget=HourIntervalSelectWidget)
     
     class Meta:
         model = BloodDonationBooking
@@ -205,10 +246,25 @@ class BloodDonationForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
+        user = cleaned_data.get("user")
+        selected_date = cleaned_data.get('date')
+        if selected_date and selected_date <= date.today():
+            raise forms.ValidationError("Please select a date in the future.")
+        
         user = self.initial.get('user')
-        if user or BloodDonationBooking.objects.filter(user=user).exists():
+        existing_booking = BloodDonationBooking.objects.filter(user=user)
+        if existing_booking.exists() > 1:
             raise forms.ValidationError("You already have a booking.")
+        
         return cleaned_data
+        
+    # def clean(self):
+    #     cleaned_data = super().clean()
+    #     user = self.initial.get('user') 
+    #     existing_booking = BloodDonationBooking.objects.filter(user=user)
+    #     if existing_booking.exists():
+    #             raise forms.ValidationError("You already have a booking")
+    #     return cleaned_data
 
 class ProfileForm(forms.ModelForm):
     date_of_birth = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
@@ -218,15 +274,15 @@ class ProfileForm(forms.ModelForm):
     blood_type = forms.CharField(max_length=100)
     city = forms.CharField(max_length=100)
     
-    phone_number = forms.CharField(max_length=20, min_length=10)
+    
     
     class Meta:
         model = Profile
         fields = ['photo','availability','gender', 'blood_type', 'city', 'phone_number']
         
-    # def clean_phone_number(self):
-    #     phone_number = self.cleaned_data['phone_number']
-    #     parsed_number = parse(phone_number, 'ZZ')
-    #     if not is_valid_number(parsed_number):
-    #         raise forms.ValidationError('Invalid phone number.')
-    #     return phone_number    
+    # Blood request form
+class BloodRequestForm(forms.ModelForm):
+    class Meta:
+        model = BloodRequest
+        fields = ['first_name', 'last_name', 'blood_type', 'contact_number', 'location']
+    

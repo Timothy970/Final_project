@@ -1,0 +1,12 @@
+{% extends "admin/base.html" %}
+
+{% block extra_nav %}
+    <div class="app">
+        <h2>User Reports</h2>
+        <ul>
+            <li><a href="{% url 'user_report' %}">User Count</a></li>
+        </ul>
+    </div>
+    {{ block.super }}
+{% endblock %}
+````

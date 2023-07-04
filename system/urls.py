@@ -2,7 +2,7 @@ from django.urls import path, include
 from django.contrib.auth import views as auth_views
 from . import views
 # from system.routing import websocket_urlpatterns
-
+app_name = 'system'
 urlpatterns = [
     path('',views.home, name='home'),
     path('learnmore/', views.learnmore, name='learnmore'),
@@ -32,7 +32,15 @@ urlpatterns = [
     path('book/', views.blood_donation_booking, name='book_appointment'),
     path('profiles/', views.view_profiles, name='view_profiles'),
     
-    path('chat/<int:user_id>/', views.chat, name='chat'),
-    path('send_message/', views.send_message, name='send_message')
-    
-]  
+    path('request/', views.blood_request, name='emergency'),
+    path('confirm', views.confirm, name='confirm'),
+    # path('notifications/', views.notification, name='notifications'),
+    # path('notifications/<int:notification_id>/details', views.blood_request_details, name='blood_request_details'),
+    path('blood_request_count/', views.blood_request_count, name='blood_request_count'),
+    path('blood_requests/', views.blood_request_list, name='blood_requests'),
+
+    path('donation_report/', views.donation_report, name='donation_report'),
+    path('donation_report_pdf/', views.DonationReportPDF.as_view(), name='donation_report_pdf'),
+    path('reward_certificate/', views.reward_certificate, name='reward_certificate'),
+    path('user_report/', views.user_report, name='user_report'),
+]

@@ -1,21 +1,39 @@
+import json
 import queue
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.template import loader
 from django.http import HttpResponseRedirect, JsonResponse
-from .forms import LoginForm1, UserRegistrationForm, UserEditForm, ProfileEditForm, BloodDonationForm, ProfileForm
+from .forms import LoginForm1, UserRegistrationForm, UserEditForm, ProfileEditForm, BloodDonationForm, ProfileForm, BloodRequestForm
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import get_object_or_404 
 from django.contrib.auth.models import User
-from .models import Profile, DonationSchedule, Message, BloodDonationBooking
+from .models import Profile, DonationSchedule, Message, BloodDonationBooking, Donation_Made
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 # from channels.layers import get_channel_layer
+from django.db.models import Q, F
+# from .consumers import ChatConsumery
+from .forms import BloodRequestForm
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from django.core.mail import send_mail
+from .models import Notification, BloodRequest
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.views.generic import ListView
+from django.utils import timezone
+from django.utils.timezone import get_current_timezone
 from asgiref.sync import async_to_sync
-from django.db.models import Q
-# from .consumers import ChatConsumer
+from django.conf import settings
+from wkhtmltopdf.views import PDFTemplateView
+
+
+
+
+
 # Create your views here.
 def home(request):
     template = loader.get_template('home.html')
@@ -41,6 +59,14 @@ def signinrequest(request):
     return HttpResponse(template.render())
 def terms(request):
     template = loader.get_template('terms.html')
+    return HttpResponse(template.render())
+
+def notification(request):
+    template = loader.get_template('notifications.html')
+    return HttpResponse(template.render())
+
+def blood_request_confirmed(request):
+    template = loader.get_template('blood_request_confirmed.html')
     return HttpResponse(template.render())
 
 def user_login(request):
@@ -94,7 +120,10 @@ def dashboard(request):
                   'dashboard.html',
                   {'section': 'dashboard'})      
     
-
+def confirm(request):
+    return render(request,
+                  'blood_confirmed.html',
+                  {'section': 'confirm'}) 
 def register(request):
     
     if request.method == 'POST':
@@ -152,7 +181,13 @@ def edit(request):
     else:
         user_form = UserEditForm(instance=request.user)
         profile_form = ProfileEditForm(instance=request.user.profile)
-    return render(request, 'edit.html', {'user_form': user_form, 'profile_form': profile_form})            
+
+    whatsapp_link = None
+
+    if profile_form.is_valid():
+        whatsapp_link = profile_form.get_whatsapp_link()
+
+    return render(request, 'edit.html', {'user_form': user_form, 'profile_form': profile_form, 'whatsapp_link': whatsapp_link})            
 
 # display user details
 def user_details(request, user_id):
@@ -177,10 +212,15 @@ def user_details(request, user_id):
 def view_profiles(request):
     current_user_profile = request.user.profile
     profiles = Profile.objects.exclude(user=request.user)
+    for profile in profiles:
+        profile.whatsapp_link = profile.get_whatsapp_link()
+        print(f"WhatsApp link for {profile.user.username}: {profile.whatsapp_link}")
+
     context = {
         'current_user_profile': current_user_profile,
         'profiles': profiles
     }
+    print(context)
     return render(request, 'profile.html', context)
 
 @login_required(login_url='login')
@@ -228,33 +268,104 @@ def blood_donation_booking(request):
     return render(request, 'book_appointment.html', {'form': form, 'confirmation_message': confirmation_message})
 
 
-# #chatting
-
-def chat(request, user_id):
-    reciever = get_object_or_404(User, id=user_id)
-    messages = Message.objects.filter(
-        (Q(sender=request.user) & Q(reciever=reciever)) |
-        (Q(sender=reciever) & Q(reciever=reciever))
-    ).order_by('timestamp')
-    
-    context = {
-        'reciever': reciever,
-        'messages': messages
-    }
-    return render(request, 'chat.html', context)
-
-def send_message(request):
-    if request.method == 'POST' and request.is_ajax():
-        reciever_id = request.POST.get('reciever_id')
-        content = request.POST.get('content')
-        
-        reciever = get_object_or_404(User, id=reciever_id)
-        
-        message = Message.objects.create(
-            sender=request.user,
-            reciever=reciever,
-            content=content
-        )
-        return JsonResponse({'status': 'success'})
+#blood request
+def blood_request(request):
+    if request.method == 'POST':
+        form = BloodRequestForm(request.POST)
+        if form.is_valid():
+            blood_request = form.save()
+            send_notification_email(blood_request)
+            return redirect('confirm')
     else:
-        return JsonResponse({'status': 'error'})
+        form = BloodRequestForm()
+    return render(request, 'emergency.html', {'form': form})
+
+
+def send_notification_email(blood_request):
+    subject = 'Blood Request Notification'
+    template_data ={
+        'greeting': 'Hello blood hero,',
+        'blood_request': blood_request,
+        'info': 'Please if you are available and match the specified blood type, you can avail yourself and save a life.',
+    }
+    html_message = render_to_string('email_templates/blood_request.html', template_data)
+    plain_message = strip_tags(html_message)
+    from_email = 'webbasedblooddonation@gmail.com'
+    recipient_list = list(User.objects.values_list('email', flat=True))
+    send_mail(subject, plain_message, from_email, recipient_list, html_message=html_message)
+    #website notification
+
+
+# @login_required
+# def notifications(request):
+#     notifications = Notification.objects.filter(user=request.user).order_by('-created_at')
+#     return render(request, 'notifications.html', {'notifications': notifications})
+
+# def blood_request_details(request, notification_id):
+#     notification = get_object_or_404(Notification, id=notification_id)
+#     form = BloodRequestForm(instance=notification.blood_request)
+#     return render(request, 'blood_request_details.html', {'form': form})
+def blood_request_count(request):
+    count = BloodRequest.objects.count()
+    data = {
+        'count': count,
+    
+    }
+    return JsonResponse(data)
+
+def blood_request_list(request):
+    current_time = timezone.now()
+    blood_requests = BloodRequest.objects.annotate(
+        expiration_time=F('created_at') + timezone.timedelta(days=1)
+        ).filter(expiration_time__gt=current_time)
+    return render(request, 'blood_requests.html', {'blood_requests': blood_requests})
+
+
+#donations made report
+
+def donation_report(request):
+    donations = Donation_Made.objects.filter(donor=request.user).order_by('-date')
+    total_points = sum((donation.points_earned for donation in donations))
+    return render(request, 'donation_report.html', {'donations': donations, 'total_points': total_points})
+
+class DonationReportPDF(PDFTemplateView):
+    template_name = 'donation_report.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['donations'] = Donation_Made.objects.filter(donor=self.request.user).order_by('-date')
+        return context
+
+    def get_filename(self):
+        return 'donation_report.pdf'
+    
+def reward_certificate(request):
+    donations = Donation_Made.objects.filter(donor=request.user).order_by('-date')
+    total_points = sum(donation.points_earned for donation in donations)
+
+    if total_points >= 400:
+        certificate_type = 'platinum'
+    elif total_points >= 200:
+        certificate_type = 'gold'
+    elif total_points >= 100:
+        certificate_type = 'silver'
+    elif total_points >= 50:
+        certificate_type = 'bronze'
+    else:
+        return HttpResponse('Sorry, you have not earned enough points for a certificate yet.')
+
+    certificate_data = {'recipient_name': request.user.username, 'certificate_type': certificate_type}
+    certificate_html = render_to_string('certificate.html', certificate_data)
+    pdf_file = PDFTemplateView.as_pdf(template_name='certificate.html', context=certificate_data)
+    response = HttpResponse(pdf_file, content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="{request.user.username}_certificate.pdf"'
+    return response
+
+
+from django.contrib.auth.models import User
+from django.shortcuts import render
+
+def user_report(request):
+    users = User.objects.all()
+    context = {'users': users}
+    return render(request, 'user_report.html', context)

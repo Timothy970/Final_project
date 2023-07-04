@@ -1,14 +1,40 @@
-{% extends "home.html" %}
-{% block title %}Edit your account{% endblock %}
-{% block content %}
-    <h1>Edit your account</h1>
+{% load i18n %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Edit Profile</title>
+	<!-- <link rel ="stylesheet" href="{% static 'home.css' %}"> -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    {{ form.media }}
+</head>
+<body>
+    <!-- <!-- <h1>Edit your account</h1> -->
     <p>You can edit your account using the following form:</p>
     <form class="editform" method="post" enctype="multipart/form-data">
         {{ user_form.as_p }}
         {{ profile_form.as_p }}
+        <!-- <div class="phone-number-widget">
+            <select name="{{ widget.name }}_country_code" id="{{ widget.attrs.id }}_country_code">
+                {% for choice in widget.choices %}
+
+                <option value="{{ choice.0 }}" {% if choice.0 == widget.value.country_code %}selected{% endif %}>{{ choice.1 }}</option>
+                {% endfor %}
+            </select>
+            {{ widget.remaining_digits.render }}
+
+            <script>
+                var remainingDigits = document.getElementById("{{ widget.attrs.id }}_remaining_digits");
+                remainingDigits.placeholder = "{% trans 'Remaining digits' %}";
+                remainingDigits.name = "{{ widget.name }}_remaining_didgits";
+            </script>
+        </div> -->
         {% csrf_token %}
         <p><input type="submit" value="Save changes"></p>
 
     </form>
- 
-{% endblock %}
+</body>
+</html>

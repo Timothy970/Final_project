@@ -1,0 +1,53 @@
+<!-- blood_requests.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Blood Requests</title>
+</head>
+<body>
+  <h1>Blood Requests</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Blood Type</th>
+        <th>Contact Number</th>
+        <th>Location</th>
+        <th>Requested At</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for blood_request in blood_requests %}
+        <tr>
+          <td>{{ blood_request.first_name }}</td>
+          <td>{{ blood_request.last_name }}</td>
+          <td>{{ blood_request.blood_type }}</td>
+          <td>{{ blood_request.contact_number }}</td>
+          <td>{{ blood_request.location }}</td>
+          <td>{{ blood_request.created_at }}</td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="6">No blood requests available.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+
+
+<!-- Include jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<script>
+  // Set the flag in session storage
+  sessionStorage.setItem('bloodRequestsVisited', true);
+
+  // Rest of the JavaScript code for the blood requests page
+  // ...
+</script>
+
+</body>
+</html>
