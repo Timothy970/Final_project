@@ -27,6 +27,7 @@ SECRET_KEY = 'django-insecure-a-kb5he+9l==a$3640_2eq60*27093&z_8txhn@a=2+bzryb-^
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
+CSRF_TRUSTED_ORIGINS = ["https://*.onrender.com"]
 
 STATIC_ROOT = BASE_DIR/ 'staticfiles'
 
