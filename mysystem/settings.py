@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -89,14 +90,19 @@ ASGI_APPLICATION = 'mysystem.asgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'highschool',
-        'USER': 'root',
-        'PASSWORD': '20n7sunb01',
-        'PORT': 3306,
-        'HOST': '127.0.0.1',
-    }
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'NAME': 'highschool',
+    #     'USER': 'root',
+    #     'PASSWORD': '20n7sunb01',
+    #     'PORT': 3306,
+    #     'HOST': '127.0.0.1',
+    # }
+        'default': dj_database_url.config(
+        default=os.getenv('DATABASE_URL'),
+        conn_max_age=600,
+        ssl_require=False
+    )
 }
 
 
