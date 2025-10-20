@@ -335,7 +335,7 @@ def blood_request_list(request):
     current_time = timezone.now()
     blood_requests = BloodRequest.objects.annotate(
         expiration_time=F('created_at') + timezone.timedelta(days=1)
-        ).filter(expiration_time__gt=current_time)
+        )
     return render(request, 'blood_requests.html', {'blood_requests': blood_requests})
 
 
@@ -361,24 +361,35 @@ def reward_certificate(request):
     donations = Donation_Made.objects.filter(donor=request.user).order_by('-date')
     total_points = sum(donation.points_earned for donation in donations)
 
-    if total_points >= 400:
-        certificate_type = 'platinum'
-    elif total_points >= 200:
-        certificate_type = 'gold'
-    elif total_points >= 100:
-        certificate_type = 'silver'
-    elif total_points >= 50:
-        certificate_type = 'bronze'
-    else:
-        return HttpResponse('Sorry, you have not earned enough points for a certificate yet.')
+    if total_points < 50:
+        remaining_points = max(0, 50 - total_points)
+        return render(request, 'no_certificate.html', {
+            'total_points': total_points,
+            'remaining_points': remaining_points
+        })
 
-    certificate_data = {'recipient_name': request.user.username, 'certificate_type': certificate_type}
-    certificate_html = render_to_string('certificate.html', certificate_data)
-    pdf_file = PDFTemplateView.as_pdf(template_name='certificate.html', context=certificate_data)
+    if total_points >= 400:
+        certificate_type = 'Platinum'
+    elif total_points >= 200:
+        certificate_type = 'Gold'
+    elif total_points >= 100:
+        certificate_type = 'Silver'
+    else:
+        certificate_type = 'Bronze'
+
+    certificate_data = {
+        'recipient_name': request.user.username,
+        'certificate_type': certificate_type,
+    }
+
+    pdf_file = PDFTemplateView.as_pdf(
+        template_name='certificate.html',
+        context=certificate_data
+    )
+
     response = HttpResponse(pdf_file, content_type='application/pdf')
     response['Content-Disposition'] = f'attachment; filename="{request.user.username}_certificate.pdf"'
     return response
-
 
 from django.contrib.auth.models import User
 from django.shortcuts import render
