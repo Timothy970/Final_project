@@ -23,10 +23,7 @@ services:
       python manage.py migrate && gunicorn system.wsgi:application --bind 0.0.0.0:$PORT
     envVars:
       - key: DATABASE_URL
-        fromService:
-          type: pserv
-          name: mysql
-          property: connectionString
+        value: mysql://root:${MYSQL_PASSWORD}@mysql:3306/highschool
       - key: DJANGO_SETTINGS_MODULE
         value: system.settings
       - key: SECRET_KEY
