@@ -1,8 +1,11 @@
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.contrib.auth import views as auth_views
 from . import views
+from . import consumers
+
 # from system.routing import websocket_urlpatterns
-app_name = 'system'
+# app_name = 'system'
+
 urlpatterns = [
     path('',views.home, name='home'),
     path('learnmore/', views.learnmore, name='learnmore'),
@@ -32,7 +35,9 @@ urlpatterns = [
     path('book/', views.blood_donation_booking, name='book_appointment'),
     path('profiles/', views.view_profiles, name='view_profiles'),
     
-    path('request/', views.blood_request, name='emergency'),
+    path('request/', views.blood_request, name='request_blood'),
+    path('emergency/', views.blood_request, name='emergency'),
+
     path('confirm', views.confirm, name='confirm'),
     # path('notifications/', views.notification, name='notifications'),
     # path('notifications/<int:notification_id>/details', views.blood_request_details, name='blood_request_details'),
@@ -43,4 +48,15 @@ urlpatterns = [
     path('donation_report_pdf/', views.DonationReportPDF.as_view(), name='donation_report_pdf'),
     path('reward_certificate/', views.reward_certificate, name='reward_certificate'),
     path('user_report/', views.user_report, name='user_report'),
+    path('chats/', views.chat_list, name='chat_list'),
+    # path('chats/<int:user_id>/', views.chat_detail, name='chat_detail'),
+    path('chats/<int:user_id>/', views.chat_list, name='chat_list_with'),
+    # API endpoints
+    path('api/chats/<int:user_id>/messages/', views.chat_messages_api, name='chat_messages_api'),
+    path('api/chats/<int:user_id>/mark_read/', views.mark_read_api, name='chat_mark_read'),
+]
+
+
+websocket_urlpatterns = [
+    re_path(r'ws/chat/(?P<user_id>\d+)/$', consumers.ChatConsumer.as_asgi()),
 ]

@@ -1,135 +1,99 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Online Blood Donation System</title>
-	<link rel ="stylesheet" href="{% static 'home.css' %}">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-</head>
-<body>
-	<nav class="nav-bar">
-		<div class="nav-text">
-			<h1>Online Blood Donation System</h1>
-		</div>
-		<div class="nav-link">
-			<ul>
-				{% comment %} <li><a href="{% url 'home' %}">Home</a></li> {% endcomment %}
-				{% comment %} <li class="dropdown">
-					<a href="javascript:void(0)" class="dropbtn">Login</a>
-					<div class="dropdown-content">
-					  <a href="{% url 'login' %}">Login as Donor</a>
-					  <a href="{% url 'loginrecipient' %}">Login as Recipient</a>
-					  
-					</div>
-				</li> {% endcomment %}
-				<li><a href="{% url 'emergency' %}">Emergency</a></li>
-				<li><a href="{% url 'register' %}">Register</a></li>
-				<li><a href="{% url 'login' %}">Login</a></li>
-				<li><a href="{% url 'view_profiles' %}">Contact Donors</a></li>
-				
-				
-			</ul>
-		</div>	
-	</nav>
-	{% block content %}
-	{% if request.user.is_authenticated %}
-		{% comment %} <ul class="menu">
- 			<li {% if section == "dashboard" %}class="selected"{% endif %}>
- 				<a href="{% url "dashboard" %}">My dashboard</a>
- 			</li>
- 			<li {% if section == "images" %}class="selected"{% endif %}>
-				 <a href="#">Images</a>
- 			</li>
 
- 			<li {% if section == "people" %}class="selected"{% endif %}>
-				 <a href="#">People</a>
- 			</li>
- 		</ul> {% endcomment %}
-	 {% endif %}
-	<span class="user">
- 		{% if request.user.is_authenticated %}
- 			Hello {{ request.user.first_name|default:request.user.username }},
-			 {% comment %} <a href="{% url "logout" %}">Logout</a> {% endcomment %}
-		{% else %}
-			 {% comment %} <a href="{% url "login" %}">Log-in</a> {% endcomment %}
-		{% endif %}
-	</span>	
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>BloodHeroes - Save Lives Through Blood Donation</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link rel="stylesheet" href="{% static 'css/home.css' %}">
 
-		
-		<div class="donation-info">
-			<h2>The Importance of Blood Donation</h2>
-			<img class="img_donate" src="{% static 'blood.jpg' %}" alt="donate blood">
-			<p>Donating blood is a simple yet impactful way to save lives. Every 2 seconds, someone in the world needs blood. By donating blood, you can help patients who are undergoing surgery, recovering from cancer treatments, or suffering from life-threatening injuries. Your blood donation can make a real difference in someone's life.</p>
-		<div class="center">
-			<!-- <button class="get_answers" onclick="window.location.href = '{% url 'register'%}';">CREATE ACCOUNT</button>
-			 -->
-			 <button class="get_answers" onclick="window.location.href = '{% url 'register' %}';">CREATE ACCOUNT</button>
- 
-		</div>
-		</div>
-		<div class="donation-info2">
-			<h2>In Need of Blood Donation?</h2>
-			<img class="img_request" src="{% static 'blood1.jpg' %}" alt="need of blood">
-			<p>Are you there looking for blood donors for a friend, family member or someone in need blood donation? Meet various blood donor volunteers and communicate with them. Luckily you can fnd a potential donor for the person in need of blood donation and keep on saving lives.</p>
-			
-			<div class="center"><button class="get_answers" onclick="window.location.href = '{% url 'emergency'%}';">EMERGENCY REQUEST</button></div>
-		</div>
-		<div class="donation-info3">
-			<h2>Am I Eligible to Donate Blood?</h2>
-			<img class="img_eligible" src="{% static 'blood2.jpg' %}" alt="need of blood">
-			<p>Are you eligible for blood donation? Find out now the eligibility requirements to donate blood today. Learn about general health, travel, medications, tattos, and more.</p>
-		<div class="center">
-			<button class="get_answers" onclick="window.location.href = '{% url 'learnmore'%}';">LEARN MORE</button></div>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap"
+            rel="stylesheet">
+    </head>
 
-		</div>
-		{% comment %} <div class="donation-info4">
-			<h2>New to Blood Donation?</h2>
-			<p>We answer the most frequent asked questions about blood donation in the new Be a Hero Donor Guide. Enter your information to learn the truth about some blood donation myths and how you can help patients.</p>
-			<form>
-				<label for="fname">First Name</label>
-				<input type="text" id="fname" name="firstname" placeholder="Your first name...">
+    <body>
+        {% include 'includes/modals.html' %}
+        <!-- Hero Section -->
+        <section class="hero">
+        {% include 'includes/navbar.html' %}
+            <div class="hero-content">
+                <h1>Donate Blood, Save Lives</h1>
+                <p>Join our community of heroes and make a difference in someone's life today. Every drop counts in the
+                    fight to save lives.</p>
+                <div class="hero-buttons">
+                    <a href="{% url 'register' %}" class="cta-button">Become a Donor</a>
+                    <a href="{ % url 'emergency' %}" class="secondary-button">Request Blood</a>
+                </div>
+            </div>
+        </section>
 
-				<label for="lname">Last Name</label>
-				<input type="text" id="lname" name="lastname" placeholder="Your last name..." required>
+        <!-- Stats Section -->
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number">10,000+</div>
+                <div class="stat-label">Lives Saved</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">5,000+</div>
+                <div class="stat-label">Active Donors</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">Emergency Support</div>
+            </div>
+        </div>
 
-				<label for="email">Email</label>
-				<input type="email" id="email" name="email" placeholder="user@gmail.com" required>
+        <!-- Features Section -->
+        <section class="features">
+            <div class="section-title">
+                <h2>Why Donate With Us?</h2>
+                <p>We make the blood donation process simple, safe, and rewarding for everyone involved.</p>
+            </div>
 
-				<label for="city">City</label>
-				<input type="text" id="city" name="city" placeholder="Your city..." required>
-			</form>
-			<div class="center">
-				<button class="get_answers">DOWNLOAD NOW</button>
-			</div>	
-			<p><i>By submitting this form you agree to our <a href="#">Privacy Policy</a>.</i></p>
-		</div> {% endcomment %}
-	</main>
-	{% endblock %}
-	
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-heartbeat"></i>
+                    </div>
+                    <h3>Save Lives</h3>
+                    <p>Your single donation can save up to three lives. Be someone's hero today.</p>
+                </div>
 
-</body>
-	<footer>
-		<div class="footer">
-			<h3>
-			**Contact us**
-			</h3>
-			<h5>Tel. 0225468376
-			<a href = "mailto:kimanitimothy642@gmail.com?subject = Feedback&body = Message">
-				@naiduhospitalgmail.com
-				</a></h5>
-			<h4>
-				&copy; 2023, Created for Naidu Hospital
-				<a href="https://wa.me/254746166343?text=Hello%20there,%20I%20to%20I%20enquire%20about%20Blood%20Heroe%20online%20%20blood%20donation%20system." target = "blank" class="fa fa-whatsapp"></a>			
-				<a href="https://www.facebook.com/NaiduHospital.Thika" class="fa fa-facebook"></a>
-				<a href="https://twitter.com/naiduhospital" class="fa fa-twitter"></a>
-			</h4>
-			
-		</div>
-	</footer>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Safe Process</h3>
+                    <p>Our donation process follows the highest safety standards to protect donors and recipients.</p>
+                </div>
 
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <h3>Emergency Response</h3>
+                    <p>Quickly connect with donors during emergencies when every second counts.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section class="cta-section">
+            <div class="cta-content">
+                <h2>Ready to Make a Difference?</h2>
+                <p>Join thousands of donors who are saving lives every day. Your blood could be the gift that gives
+                    someone more time with their loved ones.</p>
+                <a href="#" class="cta-button" onclick="openRegisterModal()">Register Now </a>
+            </div>
+        </section>
+
+        <!-- Footer -->
+    {% include 'includes/footer.html' %}
+        <script src="{% static 'js/modals.js' %}"></script>
+
+    </body>
 
 </html>
-

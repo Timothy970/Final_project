@@ -7,7 +7,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 from django.core.validators import RegexValidator
 import pycountry
 from django.utils.translation import gettext_lazy as _
-from datetime import datetime, timedelta
+from datetime import date, timedelta
 from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 from django. template.loader import render_to_string
@@ -110,26 +110,33 @@ availability_choices=(
 bloodtype_choices=(
     ('A+', 'A+'),
     ('A-', 'A-'),
+    ('AB+', 'AB+'),
+    ('AB-', 'AB-'),
     ('B+', 'B+'),
     ('A-', 'A-'),
     ('O+', 'O+'),
     ('O-', 'O-'),
 )
 def validate_age(value):
-    today = datetime.today()
-    age_limit = today - timedelta(days=16*365)
-    if value > age_limit.date():
-        raise   ValidationError(
+    today = date.today()
+    age_limit = today - timedelta(days=16 * 365)
+    if value > age_limit:
+        raise ValidationError(
             _('You must be 16 years or older'),
             params={'value': value},
         )
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     # id = models.AutoField(primary_key=True)
-    date_of_birth = models.DateField(null=True)
+    date_of_birth = models.DateField(null=True, validators=[validate_age])
     photo = models.ImageField(upload_to='users/%Y/%m/%d/', blank=True)
     availability = models.CharField(max_length=200, choices=availability_choices, default='Anyday')
-    gender = models.CharField(max_length=100,choices=gender_choices, default='Male')
+    gender = models.CharField(
+    max_length=100,
+    choices=gender_choices,
+    null=True,
+    blank=True
+)
     blood_type = models.CharField(max_length=100,choices=bloodtype_choices, default='A+')
     city = models.CharField(max_length=100,choices=city_choices, default='Nairobi')
 
@@ -151,13 +158,6 @@ class DonationSchedule(models.Model):
     date = models.DateField()
     time_slot = models.TimeField() 
     
-class Message(models.Model):
-    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_message')
-    reciever = models.ForeignKey(User, on_delete=models.CASCADE, related_name='recieved_message')
-    content = models.TextField()
-    timestamp = models.DateTimeField(auto_now_add=True)   
-
-
     
 class BloodDonationBooking(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -200,3 +200,25 @@ class Donation_Made(models.Model):
     points_earned = models.IntegerField(default=0)
     def __str__(self):
         return f"{self.donor.username}'s donation on {self.date} at {self.time}."
+    
+
+class Chat(models.Model):
+    participants = models.ManyToManyField(User)
+    created_at = models.DateTimeField(default=timezone.now)
+
+class Message(models.Model):
+    chat = models.ForeignKey(
+        Chat,
+        related_name='messages',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
+    )
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_message')
+    reciever = models.ForeignKey(User, on_delete=models.CASCADE, related_name='recieved_message')
+    content = models.TextField()
+    is_read = models.BooleanField(default=False) 
+    timestamp = models.DateTimeField(default=timezone.now)   
+
+    class Meta:
+        ordering = ['timestamp']

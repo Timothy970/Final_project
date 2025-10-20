@@ -16,11 +16,11 @@ from django.views.decorators.csrf import csrf_exempt
 # from channels.layers import get_channel_layer
 from django.db.models import Q, F
 # from .consumers import ChatConsumery
-from .forms import BloodRequestForm
+from .forms import BloodRequestForm, MessageForm
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.core.mail import send_mail
-from .models import Notification, BloodRequest
+from .models import Notification, BloodRequest, Message, Chat
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.views.generic import ListView
@@ -29,9 +29,18 @@ from django.utils.timezone import get_current_timezone
 from asgiref.sync import async_to_sync
 from django.conf import settings
 from wkhtmltopdf.views import PDFTemplateView
+from django.contrib import messages
+from django.db.models import Max, Count, Q
+import logging
+from django.http import JsonResponse, HttpResponseBadRequest
+from django.contrib.auth import get_user_model
+from django.utils.dateparse import parse_datetime
+# logger = logging.getLogger('myapp')
+from .utils import get_or_create_1to1_chat
 
 
-
+User = get_user_model()
+PAGE_SIZE = 20
 
 
 # Create your views here.
@@ -137,9 +146,17 @@ def register(request):
  # Set the chosen password
             new_user.set_password(user_form.cleaned_data['password'])
             new_user.save()
-            Profile.objects.create(user=new_user)
+            Profile.objects.create(
+                user=new_user,
+                date_of_birth=user_form.cleaned_data['date_of_birth'],
+                phone_number=user_form.cleaned_data['phone_number'],
+                city=user_form.cleaned_data['city'],
+                blood_type=user_form.cleaned_data['blood_type'],
+                availability=user_form.cleaned_data['availability'],
+                gender=user_form.cleaned_data['gender']
+            )
             return render(request,
-                          'register_done.html',
+                          'dashboard.html',
                           {'new_user': new_user})
 
     else:
@@ -275,7 +292,8 @@ def blood_request(request):
         if form.is_valid():
             blood_request = form.save()
             send_notification_email(blood_request)
-            return redirect('confirm')
+            messages.success(request, "Your blood request has been submitted successfully.")
+            return redirect('emergency') 
     else:
         form = BloodRequestForm()
     return render(request, 'emergency.html', {'form': form})
@@ -369,3 +387,143 @@ def user_report(request):
     users = User.objects.all()
     context = {'users': users}
     return render(request, 'user_report.html', context)
+
+
+@login_required
+def chat_view(request, user_id):
+    receiver = get_object_or_404(User, id=user_id)
+    messages = Message.objects.filter(
+        sender__in=[request.user, receiver],
+        receiver__in=[request.user, receiver]
+    )
+    form = MessageForm(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        new_message = form.save(commit=False)
+        new_message.sender = request.user
+        new_message.receiver = receiver
+        new_message.save()
+        return redirect('chat_view', user_id=receiver.id)
+    
+    return render(request, 'chat/chat.html', {
+        'receiver': receiver,
+        'messages': messages,
+        'form': form
+    })
+
+@login_required
+def chat_list(request, user_id=None):
+    chats = (
+        Chat.objects.filter(participants=request.user)
+        .annotate(latest_message_time=Max("messages__timestamp"))
+        .order_by("-latest_message_time")
+        .distinct()
+    )
+
+    chat_rows = []
+    seen = set()
+    for chat in chats:
+        other = chat.participants.exclude(id=request.user.id).first()
+        if not other or other.id in seen:
+            continue
+        seen.add(other.id)
+        latest = chat.messages.order_by('-timestamp').first()
+        unread_count = chat.messages.filter(is_read=False, reciever=request.user).count()
+        chat_rows.append({
+            "chat": chat,
+            "other": other,
+            "latest_message": latest,
+            "unread_count": unread_count
+        })
+
+    context = {"chats": chat_rows}
+
+    if user_id:
+        other_user = get_object_or_404(User, id=user_id)
+        context["open_user_id"] = other_user.id
+        context["open_user_name"] = other_user.username
+
+    return render(request, "chat_list.html", context)
+
+
+@login_required
+def chat_messages_api(request, user_id):
+    """
+    GET: Return JSON messages for chat between request.user and user_id.
+    Query params:
+      - before: ISO datetime string (returns messages older than this timestamp)
+    """
+    if request.method != "GET":
+        return HttpResponseBadRequest("Only GET allowed")
+
+    current_user = request.user
+    other_user = get_object_or_404(User, id=user_id)
+
+    # Get only messages between these two users
+    qs = Message.objects.filter(
+        Q(sender=current_user, reciever=other_user) |
+        Q(sender=other_user, reciever=current_user)
+    ).order_by('-timestamp')
+
+    before = request.GET.get('before')
+    if before:
+        before_dt = parse_datetime(before)
+        if before_dt:
+            qs = qs.filter(timestamp__lt=before_dt)
+
+    messages_page = list(qs[:PAGE_SIZE])
+
+    messages_data = [
+        {
+            "id": m.id,
+            "is_mine": m.sender_id == current_user.id,  # True if I sent it
+            "sender_id": m.sender_id,
+            "sender_username": m.sender.username,
+            "content": m.content,
+            "timestamp": m.timestamp.isoformat(),
+        }
+        for m in reversed(messages_page)  # reverse to oldest→newest
+    ]
+
+    return JsonResponse({
+        "messages": messages_data,
+        "has_more": qs.count() > PAGE_SIZE
+    })
+
+
+@login_required
+def mark_read_api(request, user_id):
+    """Mark messages in chat from other_user to request.user as read."""
+    if request.method != "POST":
+        return HttpResponseBadRequest("POST required")
+
+    other_user = get_object_or_404(User, id=user_id)
+    chat, _ = get_or_create_1to1_chat(request.user, other_user)
+
+    updated = chat.messages.filter(reciever=request.user, is_read=False).update(is_read=True)
+    return JsonResponse({"marked": updated})
+
+
+@login_required
+def chat_detail(request, user_id):
+    other_user = get_object_or_404(User, id=user_id)
+
+    # Find existing chat between both users
+    chat = Chat.objects.filter(participants=request.user)\
+                       .filter(participants=other_user)\
+                       .annotate(num_participants=Count('participants'))\
+                       .filter(num_participants=2)\
+                       .first()
+
+    # If not found, create a new one
+    if not chat:
+        chat = Chat.objects.create(created_at=timezone.now())
+        chat.participants.add(request.user, other_user)
+
+    messages = Message.objects.filter(chat=chat).order_by('timestamp')
+
+    return render(request, 'chat_detail.html', {
+        'chat': chat,
+        'messages': messages,
+        'receiver': other_user,
+        'user_id': other_user.id
+    })

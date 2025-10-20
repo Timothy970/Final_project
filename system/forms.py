@@ -5,10 +5,12 @@ import datetime
 from django.forms import ValidationError
 from .models import Profile, BloodDonationBooking
 import phonenumbers
-from datetime import date 
+from datetime import date, timedelta
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
 # from.phonenumbers.phonenumberutil import PhoneNumberFormat
 from .models import BloodRequest
-
+from .models import Message
 
 
 gender_choices = (
@@ -96,46 +98,53 @@ class LoginRecipientForm1(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput)
  
 class UserRegistrationForm(forms.ModelForm):
-   
-    password = forms.CharField(label='Password', widget=forms.PasswordInput) 
-    password2 = forms.CharField(label='Confirmed password', widget=forms.PasswordInput)
-    last_name = forms.CharField(label='Last Name')
-    # dob = forms.DateField(required=True, widget=forms.DateInput(attrs={'type': 'date'}))
-    # gender = forms.ChoiceField(choices=gender_choices, required=True)
-    # city = forms.ChoiceField(choices=city_choices, required=True)
-    # availability = forms.ChoiceField(choices=availability_choices, required=True)
-    
-    def __init__(self,*args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['username'].help_text=None   
-        initial = {} 
-        for field in self.Meta.fields:
-            initial[field] = ''
-        self.initial=initial    
-    
+    password = forms.CharField(label='Password', widget=forms.PasswordInput)
+    password2 = forms.CharField(label='Confirm password', widget=forms.PasswordInput)
+    names = forms.CharField(label='Full Name', max_length=100)
+
+    # Profile fields
+    date_of_birth = forms.DateField(label='Date of Birth', widget=forms.DateInput(attrs={'type': 'date'}))
+    phone_number = forms.CharField(label='Phone Number')
+    city = forms.ChoiceField(choices=Profile._meta.get_field('city').choices)
+    blood_type = forms.ChoiceField(choices=Profile._meta.get_field('blood_type').choices)
+    availability = forms.ChoiceField(choices=Profile._meta.get_field('availability').choices)
+    gender = forms.ChoiceField(choices=Profile._meta.get_field('gender').choices)
+
     class Meta:
-        
         model = User
-        fields = ['username', 'first_name', 'last_name', 'email']
-        
+        fields = ['username', 'email']
+
     def clean_password2(self):
         cd = self.cleaned_data
-        if cd['password'] != cd['password2']:
-            raise forms.ValidationError('Passwords don\'t match.')
-        return cd['password2']    
-    
+        if cd.get('password') != cd.get('password2'):
+            raise forms.ValidationError("Passwords don't match.")
+        return cd['password2']
+
     def clean_email(self):
         data = self.cleaned_data['email']
         if User.objects.filter(email=data).exists():
             raise forms.ValidationError('Email already in use.')
         return data
-    
+
+    def clean_date_of_birth(self):
+        dob = self.cleaned_data['date_of_birth']
+        validate_age(dob)
+        return dob
     # def clean_dob(self):
     #     dob = self.cleaned_data['dob']
     #     if dob < datetime.date(1997, 1, 1):
     #         raise ValidationError('The user must be atleast 16 years old')
     #     return dob
-    
+
+def validate_age(value):
+    today = date.today()
+    age_limit = today - timedelta(days=16 * 365)
+    if value > age_limit:
+        raise ValidationError(
+            _('You must be 16 years or older'),
+            params={'value': value},
+        )
+        
 class UserEditForm(forms.ModelForm):
     
     class Meta:
@@ -286,3 +295,12 @@ class BloodRequestForm(forms.ModelForm):
         model = BloodRequest
         fields = ['first_name', 'last_name', 'blood_type', 'contact_number', 'location']
     
+
+
+class MessageForm(forms.ModelForm):
+    class Meta:
+        model = Message
+        fields = ['content']
+        widgets = {
+            'content': forms.TextInput(attrs={'placeholder': 'Type your message...'})
+        }

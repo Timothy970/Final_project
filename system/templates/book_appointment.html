@@ -1,177 +1,217 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book Appointment</title>
-    
-    <script type="text/javascript" src="/static/admin/js/core.js"></script>
-    <script type="text/javascript" src="/static/admin/js/SelectBox.js"></script>
-    <script type="text/javascript" src="/static/admin/js/SelectFilter2.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: "Trirong", serif;
-            
-        }
-        
-        .nav-bar{
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            align-items: center;
-            height: 70px;
-            
-            padding: 0 40px;
-            font-family: Verdana, Geneva, Tahoma, sans-serif;
-            background-color: #f5f5f5;
-        
-        }
-        .nav-text{
-            font-size: 22px;
-        }
-        .nav-text p{
-            font-size: 10px;
-        }
-        .nav-link ul li{
-            display: inline-block;
-            /* line-height: 50px; */
-            padding: 20px;
-        }	
-        .nav-link ul li a{
-            text-decoration: none;
-            color: #000;
-            cursor: pointer;
-            font-size: 1em;
-        }
-        @media screen and (max-width:600px) {
-            .nav-bar{
-                padding: 0 20px;
-            }
-            .nav-text{
-                font-size: 12px;
-            }
-            .nav-text p{
-                font-size: 6px;
-            }
-            .nav-link ul li{
-                padding: 5px
-            }
-        }
-        form{
-            background-color: #f2f2f2;
-            padding: 20px;
-            border-radius: 7px;
-            width: 300px;
-            margin-left: 40px;
-            margin-bottom: 20px;
-        }
-        form label{
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            font-size: 20px;
-        }
-        form input[type="text"], form input[type="date"], input[type="time"]{
-            width: 90%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 4px;
-            font-size: 18px;
-        }
-        form button[type="submit"]{
-            background-color: blue;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 4px;
-            cursor: pointer;
-            
-            left: 30px;
-        }
-        form button[type="submit"]:hover {
-        background-color: green;
-        color: red;
-        }
-                /* Set the font size and weight */
-        input[type=time] {
-        font-size: 16px;
-        font-weight: 400;
-        }
+{% extends "base.html" %}
+{% load static %}
 
-        /* Remove the default arrow icon */
-        input[type=time]::-webkit-calendar-picker-indicator {
-        display: none;
-        }
+{% block title %}Book Appointment{% endblock %}
 
-        /* Add a custom arrow icon */
-        input[type=time]::after {
-        content: "\25BC";
-        position: absolute;
-        top: 50%;
-        right: 10px;
-        transform: translateY(-50%);
-        font-size: 12px;
-        pointer-events: none;
-        }
+{% block extra_css %}
+<style>
+    /* Main Container */
+    .booking-container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+    }
 
-        /* Set the dropdown menu styles */
-        .select-time-dropdown {
-        position: absolute;
-        z-index: 1;
-        background-color: #fff;
-        border: 1px solid #ccc;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        max-height: 200px;
-        overflow-y: auto;
-        }
+    /* Form Styling */
+    .booking-form-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 2rem;
+    }
 
-        /* Set the dropdown menu item styles */
-        .select-time-dropdown option {
-        padding: 5px;
-        font-size: 14px;
-        font-weight: 400;
-        color: #333;
+    .booking-form {
+        background-color: white;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        width: 100%;
+        max-width: 600px;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: var(--dark);
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: all 0.2s ease;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1);
+    }
+
+    select.form-control {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23718096' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 1rem center;
+        background-size: 12px;
+    }
+
+    /* Button Styling */
+    .btn-submit {
+        background-color: var(--primary);
+        color: white;
+        padding: 0.75rem 2rem;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
         cursor: pointer;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        width: 100%;
+        box-shadow: 0 4px 15px rgba(229, 62, 62, 0.3);
+    }
+
+    .btn-submit:hover {
+        background-color: var(--primary-dark);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(229, 62, 62, 0.4);
+    }
+
+    /* Error Styling */
+    .error-message {
+        color: var(--primary);
+        font-size: 0.875rem;
+        margin-top: 0.5rem;
+    }
+
+    /* Confirmation Message */
+    .confirmation-message {
+        text-align: center;
+        margin: 2rem auto 0;
+        padding: 1rem;
+        background-color: #f0fff4;
+        color: #2f855a;
+        border-radius: 8px;
+        max-width: 600px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    /* Date/Time Picker Enhancements */
+    .datetime-group {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .datetime-group .form-group {
+        flex: 1;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .booking-form {
+            padding: 1.5rem;
         }
 
-        /* Set the active dropdown menu item styles */
-        .select-time-dropdown option:checked {
-        background-color: #007bff;
-        color: #fff;
+        .datetime-group {
+            flex-direction: column;
+            gap: 1.5rem;
         }
-    </style>
-    {{ form.media }}
+    }
+</style>
+{{ form.media }}
+{% endblock %}
 
-</head>
-<body>
-    <nav class="nav-bar">
-		<div class="nav-text">
-			<h1>Blood Heroes</h1>
+{% block content %}
+<div class="booking-container">
+    <div class="booking-form-container">
+        <form method="POST" action="{% url 'book_appointment' %}" class="booking-form">
+            {% csrf_token %}
             
-		</div>
-		<div class="nav-link">
-			<ul>
-        <li><a href="{% url 'view_profiles' %}">Contact Donors</a></li>
-				{% comment %} <li><a href="{% url 'register' %}">Register as Donor</a></li> {% endcomment %}
-				{% comment %} <li><a href="{% url 'login' %}">Look for Donor</a></li> {% endcomment %}
-				<li><a href="{% url 'home' %}">Logout</a></li>
-				
-			</ul>
-		</div>	
-	</nav>
-    <h1>Book Appointment</h1>
+            <h2 style="margin-bottom: 1.5rem; text-align: center; color: var(--primary);">
+                <i class="fas fa-calendar-plus"></i> Book Donation Appointment
+            </h2>
+            
+            {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.help_text %}
+                <small style="display: block; margin-top: 0.5rem; color: var(--secondary-light); font-size: 0.875rem;">
+                    {{ field.help_text }}
+                </small>
+                {% endif %}
+                {% for error in field.errors %}
+                <div class="error-message">{{ error }}</div>
+                {% endfor %}
+            </div>
+            {% endfor %}
+            
+            <div class="form-group" style="margin-top: 2rem;">
+                <button type="submit" class="btn-submit" id="submitBtn">
+                    <i class="fas fa-calendar-check"></i> Confirm Appointment
+                </button>
+            </div>
+        </form>
+    </div>
     
-    <form method="POST" action="{% url 'book_appointment' %}">
-        {% csrf_token %}
-        
-        {{ form.as_p }}
-       
-        <button type="submit" onclick="return confirm('Are you sure want to book?')">Book Appointment</button>
-    </form>
     {% if confirmation_message %}
-    <p>{{ confirmation_message }}</p>
+    <div class="confirmation-message">
+        <i class="fas fa-check-circle"></i> {{ confirmation_message }}
+    </div>
     {% endif %}
-</body>
-</html>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add form-control class to all form inputs
+        const formElements = document.querySelectorAll('.booking-form input, .booking-form select, .booking-form textarea');
+        formElements.forEach(element => {
+            if (!element.classList.contains('form-control') && 
+                element.type !== 'submit' && 
+                element.type !== 'button') {
+                element.classList.add('form-control');
+            }
+        });
+
+        // Confirmation dialog
+        const form = document.querySelector('.booking-form');
+        const submitBtn = document.getElementById('submitBtn');
+        
+        if (form && submitBtn) {
+            form.addEventListener('submit', function(e) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            });
+            
+            submitBtn.addEventListener('click', function(e) {
+                if (!confirm('Are you sure you want to book this appointment?')) {
+                    e.preventDefault();
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-calendar-check"></i> Confirm Appointment';
+                }
+            });
+        }
+        
+        // Date/time picker enhancements
+        const dateInput = document.querySelector('input[type="date"]');
+        if (dateInput) {
+            dateInput.min = new Date().toISOString().split('T')[0];
+        }
+    });
+</script>
+{% endblock %}
